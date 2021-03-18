@@ -1,0 +1,11 @@
+.DS_Store
+.gradle/
+.idea/
+build/
+building_grammar_antlr/
+gradle/
+gradlew
+gradlew.bat
+*.dylib
+solution/
+out/
