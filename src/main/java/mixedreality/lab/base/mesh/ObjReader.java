@@ -1,6 +1,6 @@
 /**
  * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
- *
+ * <p>
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
@@ -285,6 +285,12 @@ public class ObjReader {
     if (allCoords.length >= 3) {
       u = getFloatValue(allCoords[1]);
       v = getFloatValue(allCoords[2]);
+      while (u > 1) {
+        u -= 1;
+      }
+      while (v > 1) {
+        v -= 1;
+      }
       // Andrdoid?
       //return new Vector(u, 1 - v, 0);
       return new Vector2f(u, v);

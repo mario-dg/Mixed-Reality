@@ -8,12 +8,11 @@ package mixedreality.lab.base.ui;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -54,30 +53,17 @@ public abstract class Scene3D {
    */
   public void setupLights(AssetManager assetManager, Node rootNode,
                           ViewPort viewPort) {
-    // Scene
-    PointLight light1 = new PointLight(new Vector3f(-10, 10, -10));
-    light1.setColor(new ColorRGBA(0.5f, 0.5f, 0.5f, 1));
-    rootNode.addLight(light1);
-
-    // Shadows
+    // Sun
     DirectionalLight sun = new DirectionalLight();
-    sun.setColor(new ColorRGBA(0.5f, 0.5f, 0.5f, 1));
+    sun.setColor(new ColorRGBA(1f, 1f, 1f, 1));
     sun.setDirection(new Vector3f(0.5f, -1, -0.5f));
     rootNode.addLight(sun);
-  }
 
-  /**
-   * Load an animated character node.
-   *
-   * @return Scene graph node with the animated character
-   */
-  protected Node loadCharacter(AssetManager assetManager, Node rootNode,
-                               String gltfFilename) {
-    Node node = (Node) assetManager.loadModel(gltfFilename);
-    node = (Node) node.getChild("knight");
-    node.setShadowMode(RenderQueue.ShadowMode.Cast);
-    rootNode.attachChild(node);
-    return node;
+    // Shadows
+    final int SHADOWMAP_SIZE = 512;
+    DirectionalLightShadowRenderer plsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE,1);
+    plsr.setLight(sun);
+    viewPort.addProcessor(plsr);
   }
 
   /**

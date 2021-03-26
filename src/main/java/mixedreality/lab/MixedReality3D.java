@@ -6,7 +6,8 @@ import com.jme3.system.JmeCanvasContext;
 import mixedreality.lab.base.ui.ComputergraphicsFrame;
 import mixedreality.lab.base.ui.ComputergraphicsJMEApp;
 import mixedreality.lab.base.ui.Scene3D;
-import mixedreality.lab.exercise2.IntroScene;
+import mixedreality.lab.exercise2.TransformationsScene;
+import mixedreality.lab.solution.exercise2.TransformationsSceneSolution;
 
 import javax.swing.*;
 import java.util.logging.Level;
@@ -51,7 +52,7 @@ public class MixedReality3D {
 
   public static void main(String[] args) {
     // Change scene object here
-    scene = new IntroScene();
+    scene = new TransformationsSceneSolution();
 
     createJmeCanvas();
     try {
