@@ -1,6 +1,6 @@
 /**
  * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
- *
+ * <p>
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
@@ -28,8 +28,14 @@ public class Scene2D extends Canvas {
    */
   private Vector2f ur = new Vector2f(3, 3);
 
+  /**
+   * Last mouse position.
+   */
+  protected Vector2f lastMousePosition;
+
   public Scene2D(int width, int height) {
     setSize(width, height);
+    lastMousePosition = null;
   }
 
   /**
@@ -53,7 +59,7 @@ public class Scene2D extends Canvas {
   /**
    * Draw a line from a to be using the given color.
    */
-  void drawLine(Graphics gc, Vector2f a, Vector2f b, Color color) {
+  protected void drawLine(Graphics gc, Vector2f a, Vector2f b, Color color) {
     Vector2f a_ = world2Pixel(a);
     Vector2f b_ = world2Pixel(b);
     gc.setColor(color);

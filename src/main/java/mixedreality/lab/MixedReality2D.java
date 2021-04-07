@@ -3,8 +3,8 @@ package mixedreality.lab;
 import com.jme3.math.Vector2f;
 import mixedreality.lab.base.math.Curve;
 import mixedreality.lab.base.ui.Scene2D;
-import mixedreality.lab.solution.exercise1.BasisFunctionBezier;
 import mixedreality.lab.exercise1.CurveScene2D;
+import mixedreality.lab.solution.exercise1.BasisFunctionBezier;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +18,10 @@ public class MixedReality2D extends JFrame {
 
     // Set the 2D canvas here
     Curve curve = new Curve(new BasisFunctionBezier());
-    curve.setControlPoints(new Vector2f(-2,-2), new Vector2f(-1,2),
-            new Vector2f(1,-2), new Vector2f(2,3));
+    curve.setControlPoints(new Vector2f(-2, -2), new Vector2f(-1, 2),
+            new Vector2f(1, -2), new Vector2f(2, 3));
     Scene2D canvas2D = new CurveScene2D(600, 600, curve);
+    //Scene2D canvas2D = new MyRendererScene(640, 480);
 
     // Layout
     JPanel mainPanel = new JPanel();
@@ -28,7 +29,7 @@ public class MixedReality2D extends JFrame {
     getContentPane().add(mainPanel);
     mainPanel.add(canvas2D, BorderLayout.CENTER);
     JPanel ui = canvas2D.getUi();
-    if ( ui != null){
+    if (ui != null) {
       mainPanel.add(ui, BorderLayout.EAST);
     }
 

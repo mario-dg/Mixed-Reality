@@ -1,0 +1,124 @@
+/**
+ * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
+ * <p>
+ * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
+ */
+
+package mixedreality.lab.exercise3;
+
+import com.jme3.math.*;
+import mixedreality.lab.base.mesh.ObjReader;
+import mixedreality.lab.base.mesh.TriangleMesh;
+import mixedreality.lab.base.ui.Scene2D;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+
+/**
+ * 2D scene to display a 2D curve and some of its properties.
+ */
+public class MyRendererScene extends Scene2D {
+
+  /**
+   * This mesh is rendered
+   */
+  protected TriangleMesh mesh;
+
+  /**
+   * Virtual camera.
+   */
+  protected Camera camera;
+
+  /**
+   * This flag enables/disables backface culling
+   */
+  protected boolean backfaceCulling;
+
+  public MyRendererScene(int width, int height) {
+    super(width, height);
+    camera = new Camera(new Vector3f(0, 0, -2), new Vector3f(0, 0, 0),
+            new Vector3f(0, 1, 0), 90.0f / 180.0f * FastMath.PI);
+    backfaceCulling = true;
+    lastMousePosition = null;
+
+    ObjReader reader = new ObjReader();
+    mesh = reader.read("Models/cube.obj");
+    //mesh = reader.read("Models/deer.obj");
+
+    setupListeners();
+  }
+
+  @Override
+  public void paint(Graphics g) {
+    Graphics2D g2 = (Graphics2D) g;
+
+    if (mesh != null) {
+      // TODO: Draw the mesh here
+    }
+  }
+
+  /**
+   * Draw a line using the given coordinates (no further transformations).
+   */
+  public void drawLine(Graphics2D gc, Vector2f a, Vector2f b, Color color) {
+    gc.setColor(color);
+    gc.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
+  }
+
+  /**
+   * Generate and return the user interface for the scene.
+   */
+  public JPanel getUi() {
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+    JCheckBox cbBackfaceCulling = new JCheckBox("backfaceCulling");
+    cbBackfaceCulling.setSelected(backfaceCulling);
+    cbBackfaceCulling.addActionListener(e -> {
+      backfaceCulling = cbBackfaceCulling.isSelected();
+      repaint();
+    });
+    panel.add(cbBackfaceCulling);
+
+    return panel;
+  }
+
+  /**
+   * Setup listeners - used for user interaction.
+   */
+  public void setupListeners() {
+    addMouseMotionListener(new MouseMotionListener() {
+      @Override
+      public void mouseDragged(MouseEvent e) {
+        Vector2f mPos = new Vector2f(e.getX(), e.getY());
+        if (lastMousePosition != null) {
+          float dx = mPos.x - lastMousePosition.x;
+          float dy = mPos.y - lastMousePosition.y;
+          camera.rotateHorizontal(dx);
+          camera.rotateVertical(dy);
+          repaint();
+        }
+        lastMousePosition = mPos;
+      }
+
+      @Override
+      public void mouseMoved(MouseEvent e) {
+      }
+    });
+
+    addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        lastMousePosition = null;
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        lastMousePosition = null;
+      }
+    });
+  }
+}
