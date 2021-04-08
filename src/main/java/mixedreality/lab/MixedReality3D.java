@@ -52,6 +52,7 @@ public class MixedReality3D {
   public static void main(String[] args) {
     // Change scene object here
     scene = new TransformationsScene();
+    //scene = new StereoScene();
 
     createJmeCanvas();
     try {

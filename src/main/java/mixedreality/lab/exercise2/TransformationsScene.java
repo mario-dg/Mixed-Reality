@@ -74,7 +74,7 @@ public class TransformationsScene extends Scene3D {
     // Add a square to the scene graph
     createGround();
 
-    // Load a building mesh from a file and add it to the scene.
+    // Load a plane mesh from a file and add it to the scene.
     ObjReader reader = new ObjReader();
     TriangleMesh mesh = reader.read("Models/plane.obj");
     planeNode = TriangleMeshTools.createJMonkeyMesh(assetManager, mesh,

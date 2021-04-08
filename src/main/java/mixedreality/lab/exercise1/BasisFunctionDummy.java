@@ -9,7 +9,7 @@ package mixedreality.lab.exercise1;
 import mixedreality.lab.base.math.BasisFunction;
 
 /**
- * Dummy implentation for a basis function to be used in a curve.
+ * Dummy implementation for a basis function to be used in a curve.
  */
 public class BasisFunctionDummy implements BasisFunction {
   @Override

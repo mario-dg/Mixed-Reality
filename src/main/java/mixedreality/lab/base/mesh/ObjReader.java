@@ -36,8 +36,8 @@ public class ObjReader {
 
   // State of the import process
   private TriangleMesh currentMesh = null;
-  private Material currentMaterial = null;
-  private Map<String, Material> materials = null;
+  private ObjMaterial currentMaterial = null;
+  private Map<String, ObjMaterial> materials = null;
   private List<TriangleMesh> meshes = new ArrayList<TriangleMesh>();
   private int vertexIndexOffset = 0;
   private int texCoordOffset = 0;
@@ -54,7 +54,7 @@ public class ObjReader {
     directory = new File(filename).getParent() + "/";
     currentMesh = new TriangleMesh();
     meshes.add(currentMesh);
-    materials = new HashMap<String, Material>();
+    materials = new HashMap<String, ObjMaterial>();
     vertexIndexOffset = 0;
     texCoordOffset = 0;
     //textureCoordinates.clear();
@@ -150,7 +150,7 @@ public class ObjReader {
       if (components.length > 1) {
         String materalId = components[1];
         // System.out.println("Assigned material: " + materalId);
-        Material mat = materials.get(materalId);
+        ObjMaterial mat = materials.get(materalId);
         if (mat != null) {
 
           // Testing: add new mesh for each material
@@ -233,7 +233,7 @@ public class ObjReader {
       String[] components = strLine.split("\\s+");
       if (components.length >= 2) {
         String materialId = components[1];
-        currentMaterial = new Material(materialId);
+        currentMaterial = new ObjMaterial(materialId);
         materials.put(materialId, currentMaterial);
         // System.out.println("Found material " + materialId);
       }

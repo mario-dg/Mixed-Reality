@@ -6,7 +6,9 @@
 
 package mixedreality.lab.exercise3;
 
-import com.jme3.math.*;
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import mixedreality.lab.base.mesh.ObjReader;
 import mixedreality.lab.base.mesh.TriangleMesh;
 import mixedreality.lab.base.ui.Scene2D;
@@ -18,7 +20,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 /**
- * 2D scene to display a 2D curve and some of its properties.
+ * Drawing canvas for a 3D renderer.
  */
 public class MyRendererScene extends Scene2D {
 
@@ -40,7 +42,8 @@ public class MyRendererScene extends Scene2D {
   public MyRendererScene(int width, int height) {
     super(width, height);
     camera = new Camera(new Vector3f(0, 0, -2), new Vector3f(0, 0, 0),
-            new Vector3f(0, 1, 0), 90.0f / 180.0f * FastMath.PI);
+            new Vector3f(0, 1, 0), 90.0f / 180.0f * FastMath.PI, 1,
+            width, height);
     backfaceCulling = true;
     lastMousePosition = null;
 

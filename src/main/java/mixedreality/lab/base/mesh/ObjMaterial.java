@@ -10,7 +10,7 @@ import com.jme3.math.ColorRGBA;
 /**
  * Represents an OBJ-file material.
  */
-public class Material {
+public class ObjMaterial {
   /**
    * Name of the material.
    */
@@ -26,7 +26,7 @@ public class Material {
    */
   private ColorRGBA color;
 
-  public Material(String name) {
+  public ObjMaterial(String name) {
     this.name = name;
     this.textureFilename = null;
     color = new ColorRGBA(1, 1, 1, 1);

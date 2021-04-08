@@ -218,7 +218,7 @@ public class TriangleMeshTools {
 
     Geometry geom = new Geometry("triangle mesh", mesh);
 
-    com.jme3.material.Material mat = new Material(assetManager,
+    Material mat = new Material(assetManager,
             "Common/MatDefs/Light/Lighting.j3md");
     mat.setColor("Diffuse", ColorRGBA.White);
     mat.setBoolean("UseVertexColor", true);
