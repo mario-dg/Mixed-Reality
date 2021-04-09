@@ -4,7 +4,7 @@
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
-package mixedreality.lab.exercise4;
+package mixedreality.lab.exercise5;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.light.PointLight;
@@ -27,7 +27,7 @@ import mixedreality.lab.exercise3.Camera;
 import javax.swing.*;
 
 /**
- * Base 3D scene for exercise 4.
+ * Base 3D scene for exercise 5.
  */
 public class StereoScene extends Scene3D {
 

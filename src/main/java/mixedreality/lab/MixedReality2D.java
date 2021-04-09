@@ -22,6 +22,7 @@ public class MixedReality2D extends JFrame {
             new Vector2f(1, -2), new Vector2f(2, 3));
     Scene2D canvas2D = new CurveScene2D(600, 600, curve);
     //Scene2D canvas2D = new MyRendererScene(640, 480);
+    //Scene2D canvas2D = new SimplificationScene(640, 480);
 
     // Layout
     JPanel mainPanel = new JPanel();

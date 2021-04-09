@@ -21,21 +21,34 @@ public class Scene2D extends Canvas {
   /**
    * Lower left corner in world coordinates.
    */
-  private Vector2f ll = new Vector2f(-3, -3);
+  private Vector2f ll;
 
   /**
    * Upper right corner in world coordinates.
    */
-  private Vector2f ur = new Vector2f(3, 3);
+  private Vector2f ur;
 
   /**
    * Last mouse position.
    */
   protected Vector2f lastMousePosition;
 
-  public Scene2D(int width, int height) {
+  public Scene2D(int width, int height, Vector2f ll, Vector2f ur) {
     setSize(width, height);
     lastMousePosition = null;
+    setRenderArea(ll, ur);
+  }
+
+  /**
+   * Set the displayed render area.
+   */
+  public void setRenderArea(Vector2f ll, Vector2f ur) {
+    this.ll = ll;
+    this.ur = ur;
+  }
+
+  public Scene2D(int width, int height) {
+    this(width, height, new Vector2f(-3, -3), new Vector2f(3, 3));
   }
 
   /**
