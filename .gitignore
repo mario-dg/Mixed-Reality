@@ -1,11 +1,28 @@
-.DS_Store
-.gradle/
+# Not for students eyes ...
+solution/
+
+# IntelliJ
 .idea/
+out/
+
+# jMonkey
+*.dylib
+
+# Android Studio configuration.
+*.iml
+.idea/
+
+# Gradle configuration.
+.gradle/
 build/
-building_grammar_antlr/
-gradle/
 gradlew
 gradlew.bat
-*.dylib
-solution/
-out/
+
+# User configuration.
+local.properties
+
+# OS configurations.
+.DS_Store
+
+# Android NDK cmake output.
+.cxx/
