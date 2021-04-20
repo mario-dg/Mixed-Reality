@@ -14,7 +14,7 @@ import java.awt.*;
 /**
  * Base scene canvas class for all 2D implementations.
  */
-public class Scene2D extends Canvas {
+public class Scene2D extends JPanel {
 
   protected static final int POINT_SIZE = 6;
 

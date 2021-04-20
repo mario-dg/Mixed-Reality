@@ -26,8 +26,8 @@ public class MixedReality3D {
    */
   public static void createJmeCanvas() {
     AppSettings settings = new AppSettings(true);
-    settings.setWidth(ComputergraphicsFrame.JME_CANVAS_WIDTH);
-    settings.setHeight(ComputergraphicsFrame.WINDOW_HEIGHT);
+    settings.setWidth(400);
+    settings.setHeight(400);
     app = new ComputergraphicsJMEApp(scene);
     app.setSettings(settings);
     app.setShowSettings(false);
