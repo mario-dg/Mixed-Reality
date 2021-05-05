@@ -20,7 +20,7 @@ import com.jme3.scene.shape.Sphere;
 import mixedreality.lab.base.mesh.TriangleMesh;
 import mixedreality.lab.base.mesh.TriangleMeshTools;
 import mixedreality.lab.base.mesh.Vertex;
-import mixedreality.lab.base.ui.CameraController;
+import mixedreality.lab.base.ui.AbstractCameraController;
 import mixedreality.lab.base.ui.Scene3D;
 import mixedreality.lab.exercise3.Camera;
 
@@ -99,11 +99,10 @@ public class StereoScene extends Scene3D {
   }
 
   @Override
-  public void init(AssetManager assetManager, Node rootNode,
-                   CameraController cameraController) {
+  public void init(AssetManager assetManager, Node rootNode, AbstractCameraController cameraController) {
     this.assetManager = assetManager;
     this.rootNode = rootNode;
-    cameraController.setup(new Vector3f(-10, 10, -10),
+    cameraController.setup(new Vector3f(-3, 3, -3),
             new Vector3f(0, 0, 0), new Vector3f(0, 1, 0));
 
     // Cameras

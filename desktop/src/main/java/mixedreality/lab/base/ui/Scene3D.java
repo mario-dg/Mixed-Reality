@@ -1,6 +1,6 @@
 /**
  * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
- *
+ * <p>
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
@@ -9,10 +9,13 @@ package mixedreality.lab.base.ui;
 import com.jme3.asset.AssetManager;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
+import mixedreality.lab.base.Observable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -21,7 +24,9 @@ import java.util.List;
 /**
  * This scene class is used to represent the scene conent.
  */
-public abstract class Scene3D {
+public abstract class Scene3D extends Observable {
+
+  public static final String MSG_SET_CAMERA_CONTROLLER = "MSG_SET_CAMERA_CONTROLLER";
 
   /**
    * This list of tasks is scheduled to be invoked by the JME thread.
@@ -35,8 +40,7 @@ public abstract class Scene3D {
   /**
    * The init method is called once at the beginning of the runtime.
    */
-  public abstract void init(AssetManager assetManager, Node rootNode,
-                            CameraController cameraController);
+  public abstract void init(AssetManager assetManager, Node rootNode, AbstractCameraController cameraController);
 
   /**
    * The update method is used to update the simulation state.
@@ -61,7 +65,7 @@ public abstract class Scene3D {
 
     // Shadows
     final int SHADOWMAP_SIZE = 512;
-    DirectionalLightShadowRenderer plsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE,1);
+    DirectionalLightShadowRenderer plsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 1);
     plsr.setLight(sun);
     viewPort.addProcessor(plsr);
   }
@@ -88,5 +92,26 @@ public abstract class Scene3D {
   public synchronized void invokeRunlaterTasks() {
     runLaterTasks.forEach(task -> task.run());
     runLaterTasks.clear();
+  }
+
+  /**
+   * Provide a new camera controller. This method is only called
+   */
+  public ObserverCameraController getCameraController(Camera cam) {
+    return null;
+  }
+
+  /**
+   * Return true if the scene whants to provide a new camera controller via  getCameraController().
+   */
+  public boolean hasNewCameraController() {
+    return false;
+  }
+
+  /**
+   * Handle a picking event using the given ray.
+   */
+  public void handlePicking(Ray pickingRay) {
+    // Default: ignore
   }
 }

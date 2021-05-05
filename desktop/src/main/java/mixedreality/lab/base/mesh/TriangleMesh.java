@@ -203,4 +203,8 @@ public class TriangleMesh {
   public void setTextureName(String textureFilename) {
     this.textureName = textureFilename;
   }
+
+  public String getTextureName() {
+    return textureName;
+  }
 }

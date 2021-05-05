@@ -27,6 +27,7 @@ public class MixedReality2D extends JFrame {
     Curve curve = new Curve(new BasisFunctionDummy());
     curve.setControlPoints(new Vector2f(-2, -2), new Vector2f(-1, 2),
             new Vector2f(1, -2), new Vector2f(2, 3));
+
     // TODO: Hier anpassen
     Scene2D canvas2D = new CurveScene2D(600, 600, curve);
     //Scene2D canvas2D = new MyRendererScene(640, 480);

@@ -1,12 +1,12 @@
 /**
  * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
- *
+ * <p>
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
 package mixedreality.lab.base.ui;
 
-import com.jme3.system.JmeCanvasContext;
+import com.jme3.system.awt.AwtPanel;
 import mixedreality.lab.base.sprites.Constants;
 import mixedreality.lab.base.sprites.SpriteCanvas;
 
@@ -18,14 +18,8 @@ import java.awt.*;
  */
 public class ComputergraphicsFrame extends JFrame {
 
-  public ComputergraphicsFrame(JmeCanvasContext jmeCanvasContext, Scene3D scene) {
+  public ComputergraphicsFrame(AwtPanel jmePanel, Scene3D scene) {
     super(scene.getTitle());
-
-    // JME
-    Dimension dim = new Dimension(600, 600);
-    Canvas jmeCanvas = jmeCanvasContext.getCanvas();
-    jmeCanvas.setPreferredSize(dim);
-    jmeCanvas.setMinimumSize(dim);
 
     // Here be dragons
     SpriteCanvas spriteCanvas = new SpriteCanvas(800, 70);
@@ -41,10 +35,6 @@ public class ComputergraphicsFrame extends JFrame {
       }
     }).start();
 
-    // Layout
-    Box mainPanel = new Box(BoxLayout.X_AXIS);
-    getContentPane().add(mainPanel);
-    mainPanel.add(jmeCanvas);
 
     // UI panel
     Box uiPanel = new Box(BoxLayout.Y_AXIS);
@@ -58,12 +48,17 @@ public class ComputergraphicsFrame extends JFrame {
       uiPanel.add(sceneUI);
     }
     uiPanel.add(Box.createHorizontalGlue());
+    JPanel uiContainer = new JPanel();
+    uiContainer.add(uiPanel);
 
-    mainPanel.add(uiPanel);
+    // Layout
+    getContentPane().setLayout(new BorderLayout());
+    getContentPane().add(jmePanel, BorderLayout.CENTER);
+    getContentPane().add(spriteCanvas, BorderLayout.SOUTH);
+    getContentPane().add(uiContainer, BorderLayout.EAST);
 
-    setSize(800,600);
+    setSize(800, 600);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //pack();
     setVisible(true);
   }
 }

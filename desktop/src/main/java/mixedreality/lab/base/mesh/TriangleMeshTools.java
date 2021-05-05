@@ -1,6 +1,6 @@
 /**
  * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
- *
+ * <p>
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
@@ -150,7 +150,7 @@ public class TriangleMeshTools {
    * Create a geometry object for a triangle mesh.
    */
   public static Geometry createJMonkeyMesh(AssetManager assetManager, TriangleMesh triangleMesh) {
-    return createJMonkeyMesh(assetManager, triangleMesh, null, null);
+    return createJMonkeyMesh(assetManager, triangleMesh, triangleMesh.getTextureName(), null);
   }
 
   /**
@@ -221,7 +221,6 @@ public class TriangleMeshTools {
     Material mat = new Material(assetManager,
             "Common/MatDefs/Light/Lighting.j3md");
     mat.setColor("Diffuse", ColorRGBA.White);
-    mat.setBoolean("UseVertexColor", true);
 
     // Texture
     if (textureFilename != null) {
@@ -229,6 +228,8 @@ public class TriangleMeshTools {
       mat.setTexture("DiffuseMap", texture);
       texture.setMagFilter(Texture.MagFilter.Bilinear);
       texture.setMinFilter(Texture.MinFilter.BilinearNearestMipMap);
+    } else {
+      mat.setBoolean("UseVertexColor", true);
     }
 
     // Normal map

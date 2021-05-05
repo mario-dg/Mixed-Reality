@@ -35,6 +35,7 @@ public class Scene2D extends JPanel {
 
   public Scene2D(int width, int height, Vector2f ll, Vector2f ur) {
     setSize(width, height);
+    setPreferredSize(new Dimension(width, height));
     lastMousePosition = null;
     setRenderArea(ll, ur);
   }
