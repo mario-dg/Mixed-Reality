@@ -20,6 +20,8 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.6.2')
     // Tinkerforge: can be used in final project
     implementation 'com.tinkerforge:tinkerforge:2.1.30'
+    // OpenCV: can be used in final project
+    implementation 'org.openpnp:opencv:4.5.1-2'
 }
 
 test {
