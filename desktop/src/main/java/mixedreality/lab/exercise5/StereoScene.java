@@ -17,12 +17,12 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
-import mixedreality.lab.base.mesh.TriangleMesh;
-import mixedreality.lab.base.mesh.TriangleMeshTools;
-import mixedreality.lab.base.mesh.Vertex;
-import mixedreality.lab.base.ui.AbstractCameraController;
-import mixedreality.lab.base.ui.Scene3D;
+import mixedreality.base.mesh.TriangleMesh;
+import mixedreality.base.mesh.TriangleMeshTools;
+import mixedreality.base.mesh.Vertex;
 import mixedreality.lab.exercise3.Camera;
+import ui.AbstractCameraController;
+import ui.Scene3D;
 
 import javax.swing.*;
 
@@ -84,8 +84,7 @@ public class StereoScene extends Scene3D {
   }
 
   @Override
-  public void setupLights(AssetManager assetManager, Node rootNode,
-                          ViewPort viewPort) {
+  public void setupLights(Node rootNode) {
     // Lights
     PointLight light = new PointLight();
     light.setColor(new ColorRGBA(1f, 1f, 1f, 1));
@@ -208,14 +207,6 @@ public class StereoScene extends Scene3D {
   @Override
   public String getTitle() {
     return "Mixed Reality";
-  }
-
-  @Override
-  public JPanel getUI() {
-    JPanel introUi = new JPanel();
-    introUi.setLayout(new BoxLayout(introUi, BoxLayout.Y_AXIS));
-
-    return introUi;
   }
 
   /**

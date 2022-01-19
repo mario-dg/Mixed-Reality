@@ -98,7 +98,7 @@ public class AvatarController {
     for (Iterator<Cell> cellIt = hexMap.getCellIterator(); cellIt.hasNext(); ) {
       Cell c = cellIt.next();
       if (c.getContent() == Cell.Content.EMPTY) {
-        graph.addKnoten(new Node(c));
+        graph.addKnoten(new Node<>(c));
       }
     }
     // add edges

@@ -7,9 +7,9 @@
 package mixedreality.lab.exercise1;
 
 import com.jme3.math.Vector2f;
-import mixedreality.lab.base.math.ConvexHull2D;
-import mixedreality.lab.base.math.Curve;
-import mixedreality.lab.base.ui.Scene2D;
+import mixedreality.base.math.ConvexHull2D;
+import mixedreality.base.math.Curve;
+import ui.Scene2D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,6 +75,11 @@ public class CurveScene2D extends Scene2D {
   public void paint(Graphics g) {
     Graphics2D g2 = (Graphics2D) g;
     drawCurve(g2);
+  }
+
+  @Override
+  public String getTitle() {
+    return "Curves";
   }
 
   /**

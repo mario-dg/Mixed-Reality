@@ -4,7 +4,7 @@
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
-package mixedreality.lab.base.math;
+package mixedreality.base.math;
 
 /**
  * Shared interface for all basis functions.

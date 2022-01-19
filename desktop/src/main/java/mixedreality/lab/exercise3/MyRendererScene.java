@@ -9,9 +9,9 @@ package mixedreality.lab.exercise3;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import mixedreality.lab.base.mesh.ObjReader;
-import mixedreality.lab.base.mesh.TriangleMesh;
-import mixedreality.lab.base.ui.Scene2D;
+import mixedreality.base.mesh.ObjReader;
+import mixedreality.base.mesh.TriangleMesh;
+import ui.Scene2D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,6 +61,11 @@ public class MyRendererScene extends Scene2D {
     if (mesh != null) {
       // TODO: Draw the mesh here
     }
+  }
+
+  @Override
+  public String getTitle() {
+    return "2D Renderer";
   }
 
   /**

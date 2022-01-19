@@ -3,7 +3,7 @@
  *
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
-package mixedreality.lab.base.mesh;
+package mixedreality.base.mesh;
 
 import com.jme3.math.ColorRGBA;
 

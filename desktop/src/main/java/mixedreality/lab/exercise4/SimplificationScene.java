@@ -7,8 +7,8 @@
 package mixedreality.lab.exercise4;
 
 import com.jme3.math.Vector2f;
-import mixedreality.lab.base.math.BoundingBox2D;
-import mixedreality.lab.base.ui.Scene2D;
+import mixedreality.base.math.BoundingBox2D;
+import ui.Scene2D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,6 +66,11 @@ public class SimplificationScene extends Scene2D {
     Font font = new Font("Courier New", oldFont.getStyle(), 9);
     g2.setFont(font);
     drawPolygon(g2, polygon);
+  }
+
+  @Override
+  public String getTitle() {
+    return "Simplification";
   }
 
   /**

@@ -2,8 +2,8 @@ package mixedreality.lab.exercise4;
 
 
 import com.jme3.math.Vector2f;
-import mixedreality.lab.base.math.BoundingBox2D;
-import mixedreality.lab.base.ui.Logger;
+import misc.Logger;
+import mixedreality.base.math.BoundingBox2D;
 
 import java.io.*;
 import java.util.HashMap;

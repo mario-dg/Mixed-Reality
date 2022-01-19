@@ -13,25 +13,23 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
-import mixedreality.lab.base.mesh.ObjReader;
-import mixedreality.lab.base.mesh.Triangle;
-import mixedreality.lab.base.mesh.TriangleMesh;
-import mixedreality.lab.base.mesh.TriangleMeshTools;
-import mixedreality.lab.base.ui.AbstractCameraController;
-import mixedreality.lab.base.ui.Logger;
-import mixedreality.lab.base.ui.ObserverCameraController;
-import mixedreality.lab.base.ui.Scene3D;
+import misc.Logger;
+import misc.Observable;
+import mixedreality.base.mesh.ObjReader;
+import mixedreality.base.mesh.Triangle;
+import mixedreality.base.mesh.TriangleMesh;
+import mixedreality.base.mesh.TriangleMeshTools;
 import mixedreality.lab.exercise6.avatar.AnimatedMesh;
 import mixedreality.lab.exercise6.avatar.AvatarController;
 import mixedreality.lab.exercise6.map.Cell;
 import mixedreality.lab.exercise6.map.HexMap;
-
-import javax.swing.*;
+import ui.AbstractCameraController;
+import ui.ObserverCameraController;
+import ui.Scene3D;
 import java.util.Iterator;
 
 /**
@@ -78,6 +76,8 @@ public class HexMapScene extends Scene3D {
    */
   protected Node allCellNodes;
 
+  private AssetManager assetManager;
+
   public HexMapScene() {
     map = new HexMap(13, 8);
     avatar = null;
@@ -91,6 +91,7 @@ public class HexMapScene extends Scene3D {
   @Override
   public void init(AssetManager assetManager, Node rootNode, AbstractCameraController cameraController) {
     this.currentCameraController = cameraController;
+    this.assetManager = assetManager;
     setCameraController(CameraControllerType.OVERVIEW);
     makeNodesForMap(assetManager, rootNode);
 
@@ -116,43 +117,8 @@ public class HexMapScene extends Scene3D {
   }
 
   @Override
-  public void setupLights(AssetManager assetManager, Node rootNode,
-                          ViewPort viewPort) {
-    DirectionalLight sun = new DirectionalLight();
-    sun.setColor(new ColorRGBA(1f, 1f, 1f, 1));
-    sun.setDirection(new Vector3f(0.5f, -1, -0.5f));
-    rootNode.addLight(sun);
-
-    // Shadows (select smaller values for shadow map if the framerate is too low
-    final int SHADOWMAP_SIZE = 2048;
-    DirectionalLightShadowRenderer plsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 1);
-    plsr.setLight(sun);
-    viewPort.addProcessor(plsr);
-  }
-
-
-  @Override
   public String getTitle() {
     return "Hex Map";
-  }
-
-  @Override
-  public JPanel getUI() {
-    JPanel uiPanel = new JPanel();
-    uiPanel.setLayout(new BoxLayout(uiPanel, BoxLayout.Y_AXIS));
-    uiPanel.add(hexMapView2D);
-
-    JComboBox<String> comboBoxCameraController = new JComboBox<>();
-    for (CameraControllerType type : CameraControllerType.values()) {
-      comboBoxCameraController.addItem(type.toString());
-    }
-    comboBoxCameraController.addActionListener(e -> {
-      CameraControllerType type =
-              CameraControllerType.valueOf((String) comboBoxCameraController.getSelectedItem());
-      setCameraController(type);
-    });
-    uiPanel.add(comboBoxCameraController);
-    return uiPanel;
   }
 
   /**
@@ -247,4 +213,25 @@ public class HexMapScene extends Scene3D {
     // TODO
     Logger.getInstance().msg("TODO: handle picking event.");
   }
+
+  /*
+  @Override
+  public JPanel getUI() {
+    JPanel uiPanel = new JPanel();
+    uiPanel.setLayout(new BoxLayout(uiPanel, BoxLayout.Y_AXIS));
+    uiPanel.add(hexMapView2D);
+
+    JComboBox<String> comboBoxCameraController = new JComboBox<>();
+    for (CameraControllerType type : CameraControllerType.values()) {
+      comboBoxCameraController.addItem(type.toString());
+    }
+    comboBoxCameraController.addActionListener(e -> {
+      CameraControllerType type =
+              CameraControllerType.valueOf((String) comboBoxCameraController.getSelectedItem());
+      setCameraController(type);
+    });
+    uiPanel.add(comboBoxCameraController);
+    return uiPanel;
+  }
+   */
 }

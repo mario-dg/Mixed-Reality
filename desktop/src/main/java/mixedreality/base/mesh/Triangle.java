@@ -4,11 +4,11 @@
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
-package mixedreality.lab.base.mesh;
+package mixedreality.base.mesh;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import mixedreality.lab.base.ui.Logger;
+import misc.Logger;
 
 /**
  * Representation of a triangle consisting of three indices. The indices

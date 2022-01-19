@@ -1,4 +1,4 @@
-package mixedreality.lab.project;
+package mixedreality.project;
 
 import com.tinkerforge.*;
 

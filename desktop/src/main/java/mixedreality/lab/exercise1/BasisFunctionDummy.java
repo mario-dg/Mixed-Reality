@@ -6,7 +6,7 @@
 
 package mixedreality.lab.exercise1;
 
-import mixedreality.lab.base.math.BasisFunction;
+import mixedreality.base.math.BasisFunction;
 
 /**
  * Dummy implementation for a basis function to be used in a curve.

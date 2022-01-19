@@ -4,7 +4,7 @@
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
-package mixedreality.lab.base.mesh;
+package mixedreality.base.mesh;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -16,7 +16,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.texture.Texture;
 import com.jme3.util.TangentBinormalGenerator;
-import mixedreality.lab.base.ui.Logger;
+import misc.Logger;
 
 import java.util.List;
 

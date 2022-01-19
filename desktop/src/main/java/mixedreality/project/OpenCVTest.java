@@ -1,4 +1,4 @@
-package mixedreality.lab.project;
+package mixedreality.project;
 
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;

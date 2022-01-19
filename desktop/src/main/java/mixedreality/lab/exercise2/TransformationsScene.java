@@ -17,11 +17,11 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.shader.VarType;
-import mixedreality.lab.base.mesh.ObjReader;
-import mixedreality.lab.base.mesh.TriangleMesh;
-import mixedreality.lab.base.mesh.TriangleMeshTools;
-import mixedreality.lab.base.ui.AbstractCameraController;
-import mixedreality.lab.base.ui.Scene3D;
+import mixedreality.base.mesh.ObjReader;
+import mixedreality.base.mesh.TriangleMesh;
+import mixedreality.base.mesh.TriangleMeshTools;
+import ui.AbstractCameraController;
+import ui.Scene3D;
 
 import javax.swing.*;
 
@@ -99,9 +99,28 @@ public class TransformationsScene extends Scene3D {
 
   @Override
   public String getTitle() {
-    return "Mixed Reality";
+    return "Transformations";
   }
 
+  /**
+   * Generate a ground mesh.
+   */
+  private void createGround() {
+    float extend = 15;
+    Box box = new Box(new Vector3f(-extend / 2, -0.05f, -extend / 2),
+            new Vector3f(extend / 2, 0, extend / 2));
+    Geometry quadGeometry = new Geometry("Ground", box);
+    Material mat = new Material(assetManager,
+            "Common/MatDefs/Light/Lighting.j3md");
+    mat.setColor("Diffuse",
+            new ColorRGBA(0.3f, 0.15f, 0.05f, 1));
+    mat.setParam("UseMaterialColors", VarType.Boolean, true);
+    quadGeometry.setMaterial(mat);
+    rootNode.attachChild(quadGeometry);
+    quadGeometry.setShadowMode(RenderQueue.ShadowMode.Receive);
+  }
+
+  /*
   @Override
   public JPanel getUI() {
     JPanel introUi = new JPanel();
@@ -133,22 +152,5 @@ public class TransformationsScene extends Scene3D {
 
     return introUi;
   }
-
-  /**
-   * Generate a ground mesh.
    */
-  private void createGround() {
-    float extend = 15;
-    Box box = new Box(new Vector3f(-extend / 2, -0.05f, -extend / 2),
-            new Vector3f(extend / 2, 0, extend / 2));
-    Geometry quadGeometry = new Geometry("Ground", box);
-    Material mat = new Material(assetManager,
-            "Common/MatDefs/Light/Lighting.j3md");
-    mat.setColor("Diffuse",
-            new ColorRGBA(0.3f, 0.15f, 0.05f, 1));
-    mat.setParam("UseMaterialColors", VarType.Boolean, true);
-    quadGeometry.setMaterial(mat);
-    rootNode.attachChild(quadGeometry);
-    quadGeometry.setShadowMode(RenderQueue.ShadowMode.Receive);
-  }
 }

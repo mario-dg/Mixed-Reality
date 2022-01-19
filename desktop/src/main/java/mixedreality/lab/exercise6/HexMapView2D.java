@@ -95,7 +95,7 @@ public class HexMapView2D extends JPanel implements MouseListener {
       case TREE -> color = new Color(0.25f, 0.5f, 0.25f);
       case EMPTY -> color = Color.LIGHT_GRAY;
     }
-    if (cell == animController.getTargetCell()) {
+    if (animController != null && cell == animController.getTargetCell()) {
       color = Color.RED;
     }
 
