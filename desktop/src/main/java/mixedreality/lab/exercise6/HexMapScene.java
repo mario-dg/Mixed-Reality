@@ -7,7 +7,6 @@
 package mixedreality.lab.exercise6;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -16,9 +15,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.shadow.DirectionalLightShadowRenderer;
 import misc.Logger;
-import misc.Observable;
 import mixedreality.base.mesh.ObjReader;
 import mixedreality.base.mesh.Triangle;
 import mixedreality.base.mesh.TriangleMesh;
@@ -205,7 +202,6 @@ public class HexMapScene extends Scene3D {
         Logger.getInstance().msg("TODO: set first over-shoulder controller.");
       }
     }
-    notifyAllObservers(Scene3D.MSG_SET_CAMERA_CONTROLLER, currentCameraController);
   }
 
   @Override
