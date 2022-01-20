@@ -84,7 +84,7 @@ public class StereoScene extends Scene3D {
   }
 
   @Override
-  public void setupLights(Node rootNode) {
+  public void setupLights(Node rootNode, ViewPort viewPort) {
     // Lights
     PointLight light = new PointLight();
     light.setColor(new ColorRGBA(1f, 1f, 1f, 1));
