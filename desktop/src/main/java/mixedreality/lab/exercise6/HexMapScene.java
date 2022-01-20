@@ -15,6 +15,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import misc.AxisAlignedBoundingBox;
 import misc.Logger;
 import mixedreality.base.mesh.ObjReader;
 import mixedreality.base.mesh.Triangle;
@@ -24,9 +25,12 @@ import mixedreality.lab.exercise6.avatar.AnimatedMesh;
 import mixedreality.lab.exercise6.avatar.AvatarController;
 import mixedreality.lab.exercise6.map.Cell;
 import mixedreality.lab.exercise6.map.HexMap;
+import org.checkerframework.checker.units.qual.A;
 import ui.AbstractCameraController;
 import ui.ObserverCameraController;
 import ui.Scene3D;
+
+import javax.swing.*;
 import java.util.Iterator;
 
 /**
@@ -79,7 +83,7 @@ public class HexMapScene extends Scene3D {
     map = new HexMap(13, 8);
     avatar = null;
     ObjReader reader = new ObjReader();
-    treeMeshCache = reader.read("Models/tree.obj");
+    treeMeshCache = reader.read("models/tree.obj");
     hexMapView2D = new HexMapView2D(200, 300, map);
     avatarController = null;
     allCellNodes = null;
@@ -94,7 +98,7 @@ public class HexMapScene extends Scene3D {
 
     runLater(() -> {
       Node knightNode = loadCharacter(assetManager, rootNode,
-              "Models/knight.gltf");
+              "models/knight.gltf");
       knightNode.setLocalScale(0.005f * HexMap.CELL_SIDELENGTH);
       avatarController = new AvatarController(
               HexMap.to3D(map.getRandomNonOccupedCell().getGlobalCenter()), 1f, map);
@@ -124,6 +128,7 @@ public class HexMapScene extends Scene3D {
   protected void makeNodesForMap(AssetManager assetManager, Node rootNode) {
     allCellNodes = new Node();
     Node allTreeNodes = new Node();
+    AxisAlignedBoundingBox boundingBox = new AxisAlignedBoundingBox();
     for (Iterator<Cell> cellIt = map.getCellIterator(); cellIt.hasNext(); ) {
       Cell cell = cellIt.next();
       TriangleMesh cellMesh = makeMeshForCell(cell);
@@ -133,7 +138,9 @@ public class HexMapScene extends Scene3D {
 
       if (cell.getContent() == Cell.Content.TREE) {
         Geometry treeGeometry = TriangleMeshTools.createJMonkeyMesh(assetManager, treeMeshCache);
-        treeGeometry.setLocalTranslation(HexMap.to3D(cell.getGlobalCenter()));
+        Vector3f cellCenter = HexMap.to3D(cell.getGlobalCenter());
+        treeGeometry.setLocalTranslation(cellCenter);
+        boundingBox.add(cellCenter);
         treeGeometry.setLocalScale(HexMap.CELL_SIDELENGTH * 0.07f);
         treeGeometry.setShadowMode(RenderQueue.ShadowMode.Cast);
         allTreeNodes.attachChild(treeGeometry);
@@ -141,6 +148,7 @@ public class HexMapScene extends Scene3D {
     }
     rootNode.attachChild(allCellNodes);
     rootNode.attachChild(allTreeNodes);
+    currentCameraController.adjustViewTo(boundingBox);
   }
 
   /**
@@ -164,8 +172,8 @@ public class HexMapScene extends Scene3D {
     mesh.setColor(ColorRGBA.Orange);
     mesh.computeTriangleNormals();
     switch (cell.getContent()) {
-      case TREE -> mesh.setTextureName("Textures/hex_tile_grass.jpg");
-      case EMPTY -> mesh.setTextureName("Textures/hex_tile_empty.jpg");
+      case TREE -> mesh.setTextureName("textures/hex_tile_grass.jpg");
+      case EMPTY -> mesh.setTextureName("textures/hex_tile_empty.jpg");
     }
     return mesh;
   }
@@ -210,9 +218,8 @@ public class HexMapScene extends Scene3D {
     Logger.getInstance().msg("TODO: handle picking event.");
   }
 
-  /*
   @Override
-  public JPanel getUI() {
+  public JPanel getUserInterface() {
     JPanel uiPanel = new JPanel();
     uiPanel.setLayout(new BoxLayout(uiPanel, BoxLayout.Y_AXIS));
     uiPanel.add(hexMapView2D);
@@ -229,5 +236,4 @@ public class HexMapScene extends Scene3D {
     uiPanel.add(comboBoxCameraController);
     return uiPanel;
   }
-   */
 }

@@ -48,7 +48,7 @@ public class MyRendererScene extends Scene2D {
     lastMousePosition = null;
 
     ObjReader reader = new ObjReader();
-    mesh = reader.read("Models/cube.obj");
+    mesh = reader.read("models/cube.obj");
     //mesh = reader.read("Models/deer.obj");
 
     setupListeners();
@@ -76,10 +76,8 @@ public class MyRendererScene extends Scene2D {
     gc.drawLine((int) a.x, (int) a.y, (int) b.x, (int) b.y);
   }
 
-  /**
-   * Generate and return the user interface for the scene.
-   */
-  public JPanel getUi() {
+  @Override
+  public JPanel getUserInterface() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 

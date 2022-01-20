@@ -75,9 +75,9 @@ public class TransformationsScene extends Scene3D {
 
     // Load a plane mesh from a file and add it to the scene.
     ObjReader reader = new ObjReader();
-    TriangleMesh mesh = reader.read("Models/plane.obj");
+    TriangleMesh mesh = reader.read("models/plane.obj");
     planeNode = TriangleMeshTools.createJMonkeyMesh(assetManager, mesh,
-            "Textures/plane.png", null);
+            "textures/plane.png", null);
     planeNode.setShadowMode(RenderQueue.ShadowMode.Cast);
     rootNode.attachChild(planeNode);
   }
@@ -120,9 +120,8 @@ public class TransformationsScene extends Scene3D {
     quadGeometry.setShadowMode(RenderQueue.ShadowMode.Receive);
   }
 
-  /*
   @Override
-  public JPanel getUI() {
+  public JPanel getUserInterface() {
     JPanel introUi = new JPanel();
     introUi.setLayout(new BoxLayout(introUi, BoxLayout.Y_AXIS));
 
@@ -152,5 +151,4 @@ public class TransformationsScene extends Scene3D {
 
     return introUi;
   }
-   */
 }

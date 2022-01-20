@@ -82,10 +82,8 @@ public class CurveScene2D extends Scene2D {
     return "Curves";
   }
 
-  /**
-   * Generate and return the user interface for the scene.
-   */
-  public JPanel getUi() {
+  @Override
+  public JPanel getUserInterface() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 

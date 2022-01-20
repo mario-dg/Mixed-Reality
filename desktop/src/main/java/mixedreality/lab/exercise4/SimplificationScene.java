@@ -51,7 +51,7 @@ public class SimplificationScene extends Scene2D {
    * Reset the polygon
    */
   private void reset() {
-    polygon.readFromFile((String)cbPoly.getSelectedItem());
+    polygon.readFromFile((String) cbPoly.getSelectedItem());
     BoundingBox2D bbox2D = polygon.getBBox();
     setRenderArea(bbox2D.getLL().subtract(new Vector2f(0.5f, 0.5f)),
             bbox2D.getUR().add(new Vector2f(0.5f, 0.5f)));
@@ -73,10 +73,8 @@ public class SimplificationScene extends Scene2D {
     return "Simplification";
   }
 
-  /**
-   * Generate and return the user interface for the scene.
-   */
-  public JPanel getUi() {
+  @Override
+  public JPanel getUserInterface() {
     JPanel mainPanel = new JPanel();
 
     Box box = Box.createVerticalBox();
@@ -90,8 +88,8 @@ public class SimplificationScene extends Scene2D {
     box.add(buttonSimplify);
 
     cbPoly = new JComboBox<>();
-    cbPoly.addItem("Polygons/simple.polygon");
-    cbPoly.addItem("Polygons/hamburg.polygon");
+    cbPoly.addItem("polygons/simple.polygon");
+    cbPoly.addItem("polygons/hamburg.polygon");
     cbPoly.setSelectedIndex(0);
     cbPoly.addActionListener(e -> reset());
     box.add(cbPoly);
