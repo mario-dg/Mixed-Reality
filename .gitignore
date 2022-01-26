@@ -15,7 +15,6 @@ out/
 # Gradle configuration.
 .gradle/
 android/gradle/
-desktop/gradle/
 build/
 gradlew
 gradlew.bat
