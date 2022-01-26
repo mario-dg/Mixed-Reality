@@ -9,16 +9,16 @@ build-job:
   stage: build-and-test
   image: openjdk:14-jdk-slim
   script:
-    - chmod +x ./gradlew
     - cd desktop
+    - chmod +x ./gradlew
     - ./gradlew build
 
 unit-testing-job:
   stage: unit-tests
   image: openjdk:14-jdk-slim
   script:
-    - chmod +x ./gradlew
     - cd desktop
+    - chmod +x ./gradlew
     - ./gradlew test
   artifacts:
     when: always
