@@ -6,9 +6,12 @@
 
 package mixedreality.base.mesh;
 
+import com.google.common.base.Preconditions;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -16,7 +19,8 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.texture.Texture;
 import com.jme3.util.TangentBinormalGenerator;
-import misc.Logger;
+import math.MathF;
+import math.Matrices;
 
 import java.util.List;
 
@@ -45,9 +49,6 @@ public class TriangleMeshTools {
       t.addTexCoordOffset(texCoordOffset);
       baseMesh.addTriangle(t);
     }
-
-    vertexOffset += otherMesh.getNumberOfVertices();
-    texCoordOffset += otherMesh.getNumberOfTextureCoordinates();
   }
 
   /**
@@ -107,43 +108,14 @@ public class TriangleMeshTools {
   }
 
   /**
-   * Merge all vertices which are closer to one another than numerical accuracy.
+   * Generate a material for the given texture.
    */
-  public static void mergeVertices(TriangleMesh mesh) {
-    int numRemoved = 0;
-    for (int i = 0; i < mesh.getNumberOfVertices(); i++) {
-      for (int j = i + 1; j < mesh.getNumberOfVertices(); j++) {
-        if (mesh.getVertex(i).getPosition().subtract(
-                mesh.getVertex(j).getPosition()).length() < 1e-5) {
-          for (int t = 0; t < mesh.getNumberOfTriangles(); t++) {
-            Triangle triangle = mesh.getTriangle(t);
-            triangle.replaceVertexIndex(i, j);
-          }
-          // Deprecate vertex j
-          mesh.getVertex(j).getPosition().set(new Vector3f(Float.NaN, Float.NaN,
-                  Float.NaN));
-          numRemoved++;
-        }
-      }
-    }
-    // Remove all degenerated triangles.
-    for (int i = 0; i < mesh.getNumberOfTriangles(); i++) {
-      if (mesh.getTriangle(i).isDegenerated()) {
-        mesh.removeTriangle(i);
-        i--;
-      } else {
-        Triangle t = mesh.getTriangle(i);
-        Vector3f a = mesh.getVertex(t.getVertexIndex(0)).position;
-        Vector3f b = mesh.getVertex(t.getVertexIndex(1)).position;
-        Vector3f c = mesh.getVertex(t.getVertexIndex(2)).position;
-        if (Triangle.getArea(a, b, c) < 1e-5) {
-          mesh.removeTriangle(i);
-          i--;
-        }
-      }
-    }
-    Logger.getInstance().debug("Removed " + numRemoved
-            + " vertices with same position.");
+  public static Material makeTextureMaterial(AssetManager assetManager, Texture texture) {
+    Preconditions.checkNotNull(texture);
+    Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    mat.setTexture("ColorMap", texture);
+    mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+    return mat;
   }
 
   /**
@@ -185,14 +157,14 @@ public class TriangleMeshTools {
                 new Vector2f(0, 0);
 
         // Position
-        positionBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3] = (float) pos.get(0);
-        positionBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 1] = (float) pos.get(1);
-        positionBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 2] = (float) pos.get(2);
+        positionBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3] =pos.get(0);
+        positionBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 1] = pos.get(1);
+        positionBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 2] =  pos.get(2);
 
         // Normal
-        normalBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3] = (float) normal.get(0);
-        normalBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 1] = (float) normal.get(1);
-        normalBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 2] = (float) normal.get(2);
+        normalBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3] = normal.get(0);
+        normalBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 1] = normal.get(1);
+        normalBuffer[triangleIndex * 9 + vertexInTriangleIndex * 3 + 2] =  normal.get(2);
 
         // Color
         colorBuffer[triangleIndex * 12 + vertexInTriangleIndex * 4] = color.r;
@@ -221,6 +193,8 @@ public class TriangleMeshTools {
     Material mat = new Material(assetManager,
             "Common/MatDefs/Light/Lighting.j3md");
     mat.setColor("Diffuse", ColorRGBA.White);
+    mat.setBoolean("UseMaterialColors", true);
+    mat.setBoolean("UseVertexColor", true);
 
     // Texture
     if (textureFilename != null) {
@@ -244,5 +218,104 @@ public class TriangleMeshTools {
     geom.setMaterial(mat);
 
     return geom;
+  }
+
+  /**
+   * Convenience method for createArrow()
+   */
+  public static TriangleMesh makeArrow(Vector3f from, Vector3f to, ColorRGBA color) {
+    float length = from.distance(to);
+    TriangleMesh cylinderMesh = createArrow(1.0f);
+    TriangleMeshTools.scale(cylinderMesh, length);
+    Matrix3f T = Matrices.makeCoordinateSystemWhereXIs(to.subtract(from).normalize());
+    TriangleMeshTools.transform(cylinderMesh, T);
+    TriangleMeshTools.translate(cylinderMesh, from);
+    cylinderMesh.setColor(color);
+    return cylinderMesh;
+  }
+
+  /**
+   * Create a triangle mesh representing a triangle from (0,0,0) to (1,0,0)
+   */
+  public static TriangleMesh createArrow(float scale) {
+    TriangleMesh mesh = new TriangleMesh();
+
+    int RESOLUTION = 10;
+    float radiusSmall = 0.035f *  scale;
+    float radiusLarge = 0.08f * scale;
+    float segmentLength = 0.8f;
+
+    // Bottom vertices
+    for (int i = 0; i < RESOLUTION; i++) {
+      float alpha = (float) i / (float) RESOLUTION * 2.0f * MathF.PI;
+      mesh.addVertex(new Vertex(new Vector3f(0,
+              MathF.sin(alpha) * radiusSmall, MathF.cos(alpha) * radiusSmall)));
+    }
+    // Shaft inner vertices
+    for (int i = 0; i < RESOLUTION; i++) {
+      float alpha = (float) i / (float) RESOLUTION * 2.0f * MathF.PI;
+      mesh.addVertex(new Vertex(new Vector3f(segmentLength,
+              MathF.sin(alpha) * radiusSmall, MathF.cos(alpha) * radiusSmall)));
+    }
+    // Shaft outer vertices
+    for (int i = 0; i < RESOLUTION; i++) {
+      float alpha = (float) i / (float) RESOLUTION * 2.0f * MathF.PI;
+      mesh.addVertex(new Vertex(new Vector3f(segmentLength,
+              MathF.sin(alpha) * radiusLarge, MathF.cos(alpha) * radiusLarge)));
+    }
+    int bottomIndex = mesh
+            .addVertex(new Vertex(new Vector3f(0, 0, 0)));
+    int topIndex = mesh
+            .addVertex(new Vertex(new Vector3f(1, 0, 0)));
+
+    // Triangles at the bottom
+    for (int i = 0; i < RESOLUTION; i++) {
+      mesh.addTriangle(new Triangle(i, bottomIndex, (i + 1) % RESOLUTION));
+    }
+    // Triangles bottom -> shaft
+    for (int i = 0; i < RESOLUTION; i++) {
+      int iPlus = (i + 1) % RESOLUTION;
+      mesh.addTriangle(new Triangle(i, RESOLUTION + iPlus, iPlus));
+      mesh.addTriangle(new Triangle(i, RESOLUTION + i, RESOLUTION + iPlus));
+    }
+    // Triangles shaft inner -> shaft outer
+    for (int i = 0; i < RESOLUTION; i++) {
+      int iPlus = (i + 1) % RESOLUTION;
+      mesh.addTriangle(new Triangle(RESOLUTION + i, 2 * RESOLUTION + iPlus, RESOLUTION + iPlus
+      ));
+      mesh.addTriangle(new Triangle(RESOLUTION + i, 2 * RESOLUTION + i, 2 * RESOLUTION + iPlus
+      ));
+    }
+    // Triangles at top
+    for (int i = 0; i < RESOLUTION; i++) {
+      int iPlus = (i + 1) % RESOLUTION;
+      mesh.addTriangle(
+              new Triangle(2 * RESOLUTION + i, topIndex, 2 * RESOLUTION + iPlus));
+    }
+
+    mesh.computeTriangleNormals();
+    return mesh;
+  }
+
+  /**
+   * Scale the mesh vertices using the given factor.
+   */
+  public static void scale(TriangleMesh mesh, float scale) {
+    for (int i = 0; i < mesh.getNumberOfVertices(); i++) {
+      Vertex v = mesh.getVertex(i);
+      Vector3f newPos = v.getPosition().mult(scale);
+      v.getPosition().set(newPos);
+    }
+  }
+
+  /**
+   * Transform the mesh vertices using the given transformation matrix.
+   */
+  public static void transform(TriangleMesh mesh, Matrix3f t) {
+    for (int i = 0; i < mesh.getNumberOfVertices(); i++) {
+      Vertex v = mesh.getVertex(i);
+      Vector3f newPos = t.mult(v.getPosition());
+      v.getPosition().set(newPos);
+    }
   }
 }
