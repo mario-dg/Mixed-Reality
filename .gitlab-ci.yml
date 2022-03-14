@@ -8,6 +8,9 @@ stages:
 build-job:
   stage: build-and-test
   image: openjdk:14-jdk-slim
+  tags:
+    - dind
+
   script:
     - cd desktop
     - chmod +x ./gradlew
@@ -16,6 +19,9 @@ build-job:
 unit-testing-job:
   stage: unit-tests
   image: openjdk:14-jdk-slim
+  tags:
+    - dind
+
   script:
     - cd desktop
     - chmod +x ./gradlew
