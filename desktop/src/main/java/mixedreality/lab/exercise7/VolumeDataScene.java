@@ -93,22 +93,9 @@ public class VolumeDataScene extends Scene3D {
   }
 
   /**
-   * Generate arrows to visualize the coordinate system and add into scene graph
-   */
-  protected void makeCoordinateSystem() {
-    TriangleMesh x = TriangleMeshTools.makeArrow(new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), ColorRGBA.Red);
-    TriangleMesh y = TriangleMeshTools.makeArrow(new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), ColorRGBA.Green);
-    TriangleMesh z = TriangleMeshTools.makeArrow(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), ColorRGBA.Blue);
-    TriangleMeshTools.unite(x, y);
-    TriangleMeshTools.unite(x, z);
-    rootNode.attachChild(TriangleMeshTools.createJMonkeyMesh(assetManager, x));
-  }
-
-  /**
    * Generate the six texture stacks
    */
   protected void makeSliceStacks() {
-
     nodes.clear();
     for (VolumeData.Orientation orientation : VolumeData.Orientation.values()) {
       var textures = data.getTextureStack(orientation);
@@ -119,6 +106,18 @@ public class VolumeDataScene extends Scene3D {
 
       nodes.add(sliceStackNode);
     }
+  }
+
+  /**
+   * Generate arrows to visualize the coordinate system and add into scene graph
+   */
+  protected void makeCoordinateSystem() {
+    TriangleMesh x = TriangleMeshTools.makeArrow(new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), ColorRGBA.Red);
+    TriangleMesh y = TriangleMeshTools.makeArrow(new Vector3f(0, 0, 0), new Vector3f(0, 1, 0), ColorRGBA.Green);
+    TriangleMesh z = TriangleMeshTools.makeArrow(new Vector3f(0, 0, 0), new Vector3f(0, 0, 1), ColorRGBA.Blue);
+    TriangleMeshTools.unite(x, y);
+    TriangleMeshTools.unite(x, z);
+    rootNode.attachChild(TriangleMeshTools.createJMonkeyMesh(assetManager, x));
   }
 
   @Override
