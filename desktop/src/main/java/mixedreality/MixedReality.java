@@ -4,6 +4,8 @@ import com.jme3.math.Vector2f;
 import mixedreality.base.math.Curve;
 import mixedreality.lab.exercise1.BasisFunctionDummy;
 import mixedreality.lab.exercise1.CurveScene2D;
+import mixedreality.lab.exercise6.HexMapScene;
+import mixedreality.lab.solution.exercise6.HexMapSceneSolution;
 import ui.GenericCGApplication;
 
 /**
@@ -34,7 +36,7 @@ public class MixedReality extends GenericCGApplication {
     // addScene3D(new StereoScene());
 
     // Assignment 6
-    //addScene3D(new HexMapScene());
+    addScene3D(new HexMapSceneSolution());
 
     // Assignment 7
     //addScene3D(new VolumeDataScene());

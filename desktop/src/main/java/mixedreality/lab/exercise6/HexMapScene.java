@@ -25,7 +25,6 @@ import mixedreality.lab.exercise6.avatar.AnimatedMesh;
 import mixedreality.lab.exercise6.avatar.AvatarController;
 import mixedreality.lab.exercise6.map.Cell;
 import mixedreality.lab.exercise6.map.HexMap;
-import org.checkerframework.checker.units.qual.A;
 import ui.AbstractCameraController;
 import ui.ObserverCameraController;
 import ui.Scene3D;
@@ -68,16 +67,13 @@ public class HexMapScene extends Scene3D {
   private HexMapView2D hexMapView2D;
 
   /**
-   * Currently set camera controller.
-   */
-  protected AbstractCameraController currentCameraController;
-
-  /**
    * This node is the parent node of all cell nodes.
    */
   protected Node allCellNodes;
 
   private AssetManager assetManager;
+
+  protected Camera camera;
 
   public HexMapScene() {
     map = new HexMap(13, 8);
@@ -91,8 +87,8 @@ public class HexMapScene extends Scene3D {
 
   @Override
   public void init(AssetManager assetManager, Node rootNode, AbstractCameraController cameraController) {
-    this.currentCameraController = cameraController;
     this.assetManager = assetManager;
+    this.camera = cameraController.getCamera();
     setCameraController(CameraControllerType.OVERVIEW);
     makeNodesForMap(assetManager, rootNode);
 
@@ -105,6 +101,14 @@ public class HexMapScene extends Scene3D {
       avatar = new AnimatedMesh(knightNode, avatarController);
       hexMapView2D.setAnimationController(avatarController);
     });
+
+    AxisAlignedBoundingBox boundingBox = new AxisAlignedBoundingBox();
+    for (Iterator<Cell> cellIt = map.getCellIterator(); cellIt.hasNext(); ) {
+      Cell cell = cellIt.next();
+      Vector3f cellCenter = HexMap.to3D(cell.getGlobalCenter());
+      boundingBox.add(cellCenter);
+    }
+    cameraController.adjustViewTo(boundingBox);
   }
 
   @Override
@@ -148,7 +152,6 @@ public class HexMapScene extends Scene3D {
     }
     rootNode.attachChild(allCellNodes);
     rootNode.attachChild(allTreeNodes);
-    currentCameraController.adjustViewTo(boundingBox);
   }
 
   /**
@@ -195,11 +198,11 @@ public class HexMapScene extends Scene3D {
    * Set another camera controller.
    */
   protected void setCameraController(CameraControllerType type) {
-    Camera camera = currentCameraController.getCamera();
     switch (type) {
       case OVERVIEW -> {
-        currentCameraController = new ObserverCameraController(camera);
-        currentCameraController.setup(new Vector3f(7, 7, 7), map.getCenter(), Vector3f.UNIT_Y);
+        AbstractCameraController cameraController = new ObserverCameraController(camera);
+        cameraController.setup(new Vector3f(7, 7, 7), map.getCenter(), Vector3f.UNIT_Y);
+        setCameraController(cameraController);
       }
       case FIRST_PERSON -> {
         // TODO
