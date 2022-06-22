@@ -36,7 +36,7 @@ public class MixedReality extends GenericCGApplication {
     // addScene3D(new StereoScene());
 
     // Assignment 6
-    addScene3D(new HexMapSceneSolution());
+    //addScene3D(new HexMapScene());
 
     // Assignment 7
     //addScene3D(new VolumeDataScene());
