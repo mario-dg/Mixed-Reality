@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-* JDK 14
+* JDK 17
 
 ## Dependencies
 
