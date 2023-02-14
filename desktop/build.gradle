@@ -45,6 +45,9 @@ dependencies {
     // Unit-Testing
     testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
 
+    // Singular value decomposition
+    implementation 'gov.nist.math:jama:1.0.3'
+
     // Tinkerforge: can be used in final project
     implementation 'com.tinkerforge:tinkerforge:2.1.31'
     // OpenCV: can be used in final project

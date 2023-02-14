@@ -1,7 +1,6 @@
 package mixedreality;
 
 import com.jme3.system.AppSettings;
-import mixedreality.lab.exercise2.TransformationsScene;
 import ui.CG3DApplication;
 
 /**
@@ -10,9 +9,6 @@ import ui.CG3DApplication;
 public class MixedReality3D extends CG3DApplication {
 
   public MixedReality3D() {
-
-    // Asssignment 2
-    setScene3D(new TransformationsScene());
 
     // Assignment 5
     //setScene3D(new StereoScene());
