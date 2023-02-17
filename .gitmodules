@@ -1,6 +1,6 @@
 [submodule "desktop/cg_math"]
 	path = desktop/cg_math
-	url = ../../abo781/cg_math
+	url = ../cg_math
 [submodule "desktop/cg_ui"]
 	path = desktop/cg_ui
-	url = ../../abo781/cg_ui
+	url = ../cg_ui
