@@ -1,6 +1,7 @@
 /**
- * This file is part of the computer graphics project of the computer graphics group led by
- * Prof. Dr. Philipp Jenke at the University of Applied Sciences (HAW) in Hamburg.
+ * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
+ * <p>
+ * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
 
 package mixedreality.base.mesh;
@@ -157,27 +158,6 @@ public class TriangleMesh {
         }
         return bb;
     }
-    /*
-    public BoundingBox getBoundingBox() {
-        Vector3f ll = new Vector3f(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
-        Vector3f ur = new Vector3f(Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE);
-        for (Vertex v : vertices) {
-            for (int i = 0; i < 3; i++) {
-                if (v.getPosition().get(i) < ll.get(i)) {
-                    ll.set(i, v.getPosition().get(i));
-                }
-                if (v.getPosition().get(i) > ur.get(i)) {
-                    ur.set(i, v.getPosition().get(i));
-                }
-            }
-        }
-        Vector3f extend = ur.subtract(ll);
-        BoundingBox bbox = new BoundingBox(ur.add(ll).mult(0.5f), extend.x,
-                extend.y, extend.z);
-        return bbox;
-    }
-
-     */
 
     // +++ GETTER/SETTER +++++++++++++++++++++++
 

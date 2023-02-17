@@ -1,8 +1,13 @@
+/**
+ * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
+ * <p>
+ * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
+ */
+
 package mixedreality.lab.exercise7;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
@@ -16,25 +21,31 @@ import mixedreality.lab.exercise7.functions.GourSat;
 import mixedreality.lab.exercise7.functions.ImplicitFunction;
 import mixedreality.lab.exercise7.functions.Sphere;
 import mixedreality.lab.exercise7.functions.Torus;
-import mixedreality.lab.solution.exercise7.MarchingCubesSolution;
 import ui.AbstractCameraController;
 import ui.Scene3D;
 
 public class MarchingCubesScene3D extends Scene3D {
 
-    private MarchingCubes mc;
+    /**
+     * Implementation of the marching cubes algorithm.
+     */
+    private final MarchingCubes mc;
 
+    /**
+     * This implicit function shall be tessalated.
+     */
     private ImplicitFunction f;
 
-    private int res = 40;
-
+    /**
+     * JMonkey-stuff
+     */
     private AssetManager assetManager;
     private Node rootNode;
     private AbstractCameraController cameraController;
 
     public MarchingCubesScene3D() {
         this.f = new Sphere(0.5f, new Vector3f(0, 0, 0));
-        this.mc = new MarchingCubesSolution();
+        this.mc = new MarchingCubes();
 
         System.out.println("Functions: ");
         System.out.println(" 1: Sphere");
@@ -65,21 +76,26 @@ public class MarchingCubesScene3D extends Scene3D {
 
     @Override
     public void handleKey(String keyId) {
-        if (keyId.equals("KEY_1")) {
-            f = new Sphere(0.5f, new Vector3f(0, 0, 0));
-            rebuildScene();
-        } else if (keyId.equals("KEY_2")) {
-            f = new GourSat();
-            rebuildScene();
-        }else if (keyId.equals("KEY_3")) {
-            f = new Torus(0.5f, 0.25f);
-            rebuildScene();
+        switch (keyId) {
+            case "KEY_1" -> {
+                f = new Sphere(0.5f, new Vector3f(0, 0, 0));
+                rebuildScene();
+            }
+            case "KEY_2" -> {
+                f = new GourSat();
+                rebuildScene();
+            }
+            case "KEY_3" -> {
+                f = new Torus(0.5f, 0.25f);
+                rebuildScene();
+            }
         }
     }
 
     private void rebuildScene() {
         rootNode.detachAllChildren();
 
+        int res = 25;
         TriangleMesh mesh = mc.makeMesh(f, 0,
                 new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1),
                 res, res, res);

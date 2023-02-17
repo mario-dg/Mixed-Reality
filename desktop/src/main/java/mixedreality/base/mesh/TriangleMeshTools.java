@@ -3,7 +3,6 @@
  * <p>
  * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
  */
-
 package mixedreality.base.mesh;
 
 import com.google.common.base.Preconditions;

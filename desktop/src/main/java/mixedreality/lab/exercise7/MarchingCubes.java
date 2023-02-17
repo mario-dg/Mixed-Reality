@@ -1,8 +1,13 @@
+/**
+ * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
+ * <p>
+ * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
+ */
+
 package mixedreality.lab.exercise7;
 
 import com.jme3.math.Vector3f;
 import mixedreality.base.mesh.TriangleMesh;
-import mixedreality.base.mesh.TriangleMeshTools;
 import mixedreality.lab.exercise7.functions.ImplicitFunction;
 
 import java.util.Optional;

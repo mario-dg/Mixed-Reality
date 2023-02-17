@@ -1,3 +1,9 @@
+/**
+ * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
+ * <p>
+ * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
+ */
+
 package mixedreality;
 
 import com.jme3.system.AppSettings;
@@ -6,7 +12,7 @@ import mixedreality.lab.exercise7.MarchingCubesScene3D;
 import ui.CG3DApplication;
 
 /**
- * This launcher is used to start the 3D application with a Java Swing user interface.
+ * Entry class for all 3D exercises.
  */
 public class MixedReality3D extends CG3DApplication {
 

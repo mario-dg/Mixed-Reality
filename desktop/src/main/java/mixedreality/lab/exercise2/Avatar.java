@@ -1,9 +1,14 @@
+/**
+ * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
+ * <p>
+ * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
+ */
+
 package mixedreality.lab.exercise2;
 
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import math.MathF;
 import math.Vectors;
 
 /**

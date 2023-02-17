@@ -1,3 +1,9 @@
+/**
+ * Diese Datei ist Teil des Vorgabeframeworks für die Veranstaltung "Mixed Reality"
+ * <p>
+ * Prof. Dr. Philipp Jenke, Hochschule für Angewandte Wissenschaften Hamburg.
+ */
+
 package mixedreality.lab.exercise7;
 
 import com.google.common.base.Preconditions;
