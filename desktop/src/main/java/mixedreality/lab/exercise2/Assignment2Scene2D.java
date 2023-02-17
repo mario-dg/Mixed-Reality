@@ -38,7 +38,7 @@ public class Assignment2Scene2D extends Scene2D implements MouseListener {
      */
     private Vector2f mousePosInScene;
 
-    private Vector2f arrowPos;
+    private final Vector2f arrowPos;
 
     public Assignment2Scene2D(int width, int height) {
         super(width, height, new Vector2f(-1, -1), new Vector2f(1, 1));

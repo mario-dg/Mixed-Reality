@@ -1,6 +1,8 @@
 package mixedreality;
 
 import com.jme3.system.AppSettings;
+import mixedreality.lab.exercise5.StereoScene;
+import mixedreality.lab.exercise7.MarchingCubesScene3D;
 import ui.CG3DApplication;
 
 /**
@@ -13,11 +15,8 @@ public class MixedReality3D extends CG3DApplication {
     // Assignment 5
     //setScene3D(new StereoScene());
 
-    // Assignment 6
-    //setScene3D(new HexMapScene());
-
     // Assignment 7
-    //setScene3D(new VolumeDataScene());
+    setScene3D(new MarchingCubesScene3D());
   }
 
   public static void main(String[] args) {

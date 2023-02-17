@@ -1,7 +1,9 @@
 package mixedreality;
 
 import mixedreality.lab.exercise2.Assignment2Scene2D;
+import mixedreality.lab.exercise6.LSystemScene2D;
 import mixedreality.lab.solution.exercise2.Assignment2Scene2DSolution;
+import mixedreality.lab.solution.exercise6.LSystemScene2DSolution;
 import ui.CG2DApplication;
 
 public class MixedReality2D extends CG2DApplication {
@@ -16,14 +18,18 @@ public class MixedReality2D extends CG2DApplication {
 //        addScene2D(new CurveScene2D(600, 600, curve));
 
         // Assignment 2
-        addScene2D(new Assignment2Scene2D(800, 600));
-        addScene2D(new Assignment2Scene2DSolution(800, 600));
+        //addScene2D(new Assignment2Scene2D(800, 600));
+        //addScene2D(new Assignment2Scene2DSolution(800, 600));
 
         // Assignment 3
         //addScene2D(new MyRendererScene(600, 600));
 
         // Assignment 4
         //addScene2D(new SimplificationScene(600, 600));
+
+        // Assignment 6
+        addScene2D(new LSystemScene2D(800, 600));
+        addScene2D(new LSystemScene2DSolution(800, 600));
     }
 
     public static void main(String[] args) {
