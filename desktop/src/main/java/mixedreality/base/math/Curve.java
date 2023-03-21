@@ -8,6 +8,7 @@ package mixedreality.base.math;
 import com.jme3.math.Vector2f;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -71,9 +72,7 @@ public class Curve {
 
     public void setControlPoints(Vector2f... controlPoints) {
         this.controlPoints.clear();
-        for (Vector2f controlPoint : controlPoints) {
-            this.controlPoints.add(controlPoint);
-        }
+        this.controlPoints.addAll(Arrays.asList(controlPoints));
 
     }
 

@@ -15,15 +15,11 @@ public class BezierBasisFunction implements BasisFunction {
         //Catch first and last control point
         // Math.pow will yield NaN for base=0 and exponent<0
         if (t == 0 && i == 0) {
-            return degree;
+            return -degree;
         }
         if (t == 1 && i == degree) {
             return degree;
         }
-
-        var binomial = Utils.binomial(degree, i);
-        var term1 = i * Math.pow(t, i - 1) * Math.pow(1 - t, degree - i);
-        var term2 = (degree - i) * Math.pow(t, i) * Math.pow(1 - t, degree - i - 1);
-        return (float) (binomial * (term1 - term2));
+        return degree * (eval(t, i - 1, degree - 1) - eval(t, i, degree - 1));
     }
 }

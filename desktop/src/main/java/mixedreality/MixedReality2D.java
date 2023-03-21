@@ -16,19 +16,19 @@ import mixedreality.lab.exercise4.SimplificationScene;
 import mixedreality.lab.exercise6.LSystemScene2D;
 import ui.CG2DApplication;
 
+
 /**
  * Entry class for all 2d exercises.
  */
 public class MixedReality2D extends CG2DApplication {
     public MixedReality2D() {
         super("Mixed Reality");
-
         // Assignment 1
         Curve curve = new Curve(new BezierBasisFunction());
-        curve.addControlPoint(new Vector2f(0, 0));
+        curve.addControlPoint(new Vector2f(-2f, -0.5f));
         curve.addControlPoint(new Vector2f(-1f, 1f));
-        curve.addControlPoint(new Vector2f(0, 1f));
-        curve.addControlPoint(new Vector2f(1f, 2f));
+        curve.addControlPoint(new Vector2f(0f, 0f));
+        curve.addControlPoint(new Vector2f(1f, 1f));
         addScene2D(new CurveScene2D(600, 600, curve));
 
         // Assignment 2
