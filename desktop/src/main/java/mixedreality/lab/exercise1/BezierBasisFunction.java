@@ -13,12 +13,11 @@ public class BezierBasisFunction implements BasisFunction {
     @Override
     public float evalDerivative(float t, int i, int degree) {
         //Catch first and last control point
-        // Math.pow will yield NaN for base=0 and exponent<0
         if (t == 0 && i == 0) {
-            return -degree;
+            return (float) (-degree * Math.pow(1 - t, degree - 1));
         }
         if (t == 1 && i == degree) {
-            return degree;
+            return (float) (degree * Math.pow(t, degree - 1));
         }
         return degree * (eval(t, i - 1, degree - 1) - eval(t, i, degree - 1));
     }
