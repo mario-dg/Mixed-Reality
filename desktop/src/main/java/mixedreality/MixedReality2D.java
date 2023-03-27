@@ -23,6 +23,9 @@ import ui.CG2DApplication;
 public class MixedReality2D extends CG2DApplication {
     public MixedReality2D() {
         super("Mixed Reality");
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         // Assignment 1
         Curve curve = new Curve(new BezierBasisFunction());
         curve.addControlPoint(new Vector2f(-2f, -0.5f));
