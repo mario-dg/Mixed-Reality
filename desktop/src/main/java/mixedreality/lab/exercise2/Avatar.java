@@ -75,6 +75,9 @@ public class Avatar {
      * current rotation and p
      */
     protected Matrix3f makePose() {
+        /* Matrix3f m = new Matrix3f(MathF.cos(this.rotationAngle), -MathF.sin(this.rotationAngle), this.pos.x,
+                                     MathF.sin(this.rotationAngle), MathF.cos(this.rotationAngle), this.pos.y,
+                                     0, 0, 1);*/
         var rotMat = Utils.rotationMatrix2D(this.rotationAngle);
         var transMat = Utils.translationMatrix2D(this.pos);
         return transMat.mult(rotMat);
@@ -83,6 +86,23 @@ public class Avatar {
     /**
      * Move the avatar along the current orientation.
      */
+    public void moveToTargetPos() {
+        if (this.targetPos == null) return;
+        if (this.pos.subtract(this.targetPos).length() < 2 * Avatar.MOVE_VELOCITY) return;
+
+        // update rotationAngle
+        Vector2f a = getOrientation().normalize();
+        Vector2f b = this.targetPos.subtract(this.pos).normalize();
+        float alpha = MathF.atan2(a.x * b.y - a.y * b.x, a.x * b.x + a.y * b.y);
+        int signum = (int) Math.signum(alpha);
+        if (signum > 0) this.rotationAngle += Math.min(alpha, Avatar.ROTATION_VELOCITY);
+        else if (signum < 0) this.rotationAngle += Math.max(alpha, -Avatar.ROTATION_VELOCITY);
+
+        // Only move, if angle between character orientation and target orientation <= Pi/2
+        if (Math.abs(alpha) <= MathF.HALF_PI) this.pos = getPos().add(getOrientation().mult(MOVE_VELOCITY));
+    }
+
+    /*
     public void moveToTargetPos() {
         if (this.targetPos != null) {
             var currPos = getPos();
@@ -105,4 +125,6 @@ public class Avatar {
 
         }
     }
+     */
+
 }
