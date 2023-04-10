@@ -88,6 +88,7 @@ public class Avatar {
      */
     public void moveToTargetPos() {
         if (this.targetPos == null) return;
+        // if the avatar is close enough to the target, don't move
         if (this.pos.subtract(this.targetPos).length() < 2 * Avatar.MOVE_VELOCITY) return;
 
         // update rotationAngle
