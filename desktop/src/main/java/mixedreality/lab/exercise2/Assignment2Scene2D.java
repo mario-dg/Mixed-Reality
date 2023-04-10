@@ -22,6 +22,7 @@ import java.util.TimerTask;
 
 import static math.Matrices.transform;
 import static sprites.Constants.WALK_ANIMATION_IDS;
+import static sprites.Constants.renderWidth;
 
 /**
  * Base scene for assigment 2
@@ -90,7 +91,7 @@ public class Assignment2Scene2D extends Scene2D implements MouseListener {
 
     @Override
     public void paint(Graphics g) {
-
+        g.clearRect(0, 0, getWidth(), getHeight());
         // Draw target
         if (mousePosInScene != null) {
             drawPoint(g, mousePosInScene, Color.BLACK);
@@ -187,8 +188,53 @@ public class Assignment2Scene2D extends Scene2D implements MouseListener {
      * Compute the walking animation constant for the current avatar rotation.
      */
     protected Constants.WalkAnimations computeAnimationForOrientation() {
-        // TODO
-        return Constants.WalkAnimations.WALK_E;
+        var orientation = this.avatar.getOrientation();
+        orientation = orientation.divide(2f).add(new Vector2f(0.5f, 0.5f));
+
+        var x = orientation.x;
+        var y = orientation.y;
+        var res = Constants.WalkAnimations.WALK_E;
+
+//        if (y < 1f / 3f) { // South region
+//            if (x < 1f / 3f) {
+//                res = Constants.WalkAnimations.WALK_SW;
+//            } else if (x < 2f / 3f) {
+//                res = Constants.WalkAnimations.WALK_S;
+//            } else {
+//                res = Constants.WalkAnimations.WALK_SE;
+//            }
+//        } else if (y < 2f / 3f) {// Middle region (west or east)
+//
+//            if (x < 1f / 3f) {
+//                res = Constants.WalkAnimations.WALK_W;
+//            } else {
+//                res = Constants.WalkAnimations.WALK_E;
+//            }
+//        } else {//North region
+//            if (x < 1f / 3f) {
+//                res = Constants.WalkAnimations.WALK_NW;
+//            } else if (x < 2f / 3f) {
+//                res = Constants.WalkAnimations.WALK_N;
+//            } else {
+//                res = Constants.WalkAnimations.WALK_NE;
+//            }
+//
+//        }
+        if (y < 0.5f) { // South region
+            if (x < 0.5f) {
+                res = Constants.WalkAnimations.WALK_S;
+            } else {
+                res = Constants.WalkAnimations.WALK_E;
+            }
+        } else { // North region
+            if (x < 0.5f) {
+                res = Constants.WalkAnimations.WALK_W;
+            } else {
+                res = Constants.WalkAnimations.WALK_N;
+            }
+        }
+
+        return res;
     }
 
     /**

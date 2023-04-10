@@ -9,7 +9,10 @@ package mixedreality.lab.exercise2;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import math.MathF;
 import math.Vectors;
+import mixedreality.base.math.Utils;
+import sprites.Constants;
 
 /**
  * Information about the avatar in the game.
@@ -41,8 +44,13 @@ public class Avatar {
     public static final float MOVE_VELOCITY = 0.01f;
 
     public Avatar() {
-        pos = new Vector2f(0, 0);
-        rotationAngle = 0;
+        this(new Vector2f(0, 0), 0);
+        targetPos = null;
+    }
+
+    public Avatar(Vector2f pos, float rotationAngle) {
+        this.pos = pos;
+        this.rotationAngle = rotationAngle;
         targetPos = null;
     }
 
@@ -63,18 +71,38 @@ public class Avatar {
     // ++++++++++++++++ YOUR TASKS START HERE +++++++++++++++++++++++++++++++++
 
     /**
-     * Generate a 3x3 homogenious transformation matrix which contains the
+     * Generate a 3x3 homogeneous transformation matrix which contains the
      * current rotation and p
      */
     protected Matrix3f makePose() {
-        // TODO
-        return Matrix3f.IDENTITY;
+        var rotMat = Utils.rotationMatrix2D(this.rotationAngle);
+        var transMat = Utils.translationMatrix2D(this.pos);
+        return transMat.mult(rotMat);
     }
 
     /**
      * Move the avatar along the current orientation.
      */
     public void moveToTargetPos() {
-        // TODO
+        if (this.targetPos != null) {
+            var currPos = getPos();
+            var a = getOrientation().normalize();
+            var b = targetPos.normalize();
+
+            var alpha = MathF.atan2(a.x * b.y - a.y * b.x, a.x * b.x + a.y * b.y);
+            this.rotationAngle += Math.min(alpha, ROTATION_VELOCITY);
+
+            // Only move, if angle between character orientation and target orientation <= Pi/2
+            if (Math.abs(alpha) <= MathF.HALF_PI) {
+                var targetVec = this.targetPos.subtract(currPos);
+
+                // stop moving, if the distance between character and target pos < 2f * MOVE_VELOCITY
+                this.pos = currPos.add(getOrientation().mult(MOVE_VELOCITY));
+                if (targetVec.length() < 2f * MOVE_VELOCITY) {
+                    targetPos = null;
+                }
+            }
+
+        }
     }
 }
