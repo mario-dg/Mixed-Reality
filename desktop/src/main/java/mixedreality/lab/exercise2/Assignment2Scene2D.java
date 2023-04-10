@@ -242,6 +242,12 @@ public class Assignment2Scene2D extends Scene2D implements MouseListener {
      * should follow the avatar.
      */
     protected Matrix3f getArrowPose(Avatar avatar, Vector2f spritePos) {
-        return new Matrix3f();
+        // constructing base vectors
+        Vector2f b1 = avatar.getPos().subtract(arrowPos);
+        Vector2f b2 = new Vector2f(b1.y, -b1.x);
+        // construct transformation matrix
+        return new Matrix3f(b1.x, b2.x, arrowPos.x,
+                b1.y, b2.y, arrowPos.y,
+                0, 0, 1);
     }
 }
