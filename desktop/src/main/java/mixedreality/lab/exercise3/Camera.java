@@ -120,7 +120,7 @@ public class Camera {
     return fovx / getAspectRatio();
   }
 
-  private float getAspectRatio() {
+  public float getAspectRatio() {
     return (float) getWidth() / (float) getHeight();
   }
 

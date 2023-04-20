@@ -12,7 +12,6 @@ import com.jme3.math.Vector3f;
 import math.MathF;
 import math.Vectors;
 import mixedreality.base.math.Utils;
-import sprites.Constants;
 
 /**
  * Information about the avatar in the game.
@@ -75,9 +74,6 @@ public class Avatar {
      * current rotation and p
      */
     protected Matrix3f makePose() {
-        /* Matrix3f m = new Matrix3f(MathF.cos(this.rotationAngle), -MathF.sin(this.rotationAngle), this.pos.x,
-                                     MathF.sin(this.rotationAngle), MathF.cos(this.rotationAngle), this.pos.y,
-                                     0, 0, 1);*/
         var rotMat = Utils.rotationMatrix2D(this.rotationAngle);
         var transMat = Utils.translationMatrix2D(this.pos);
         return transMat.mult(rotMat);
@@ -102,30 +98,4 @@ public class Avatar {
         // Only move, if angle between character orientation and target orientation <= Pi/2
         if (Math.abs(alpha) <= MathF.HALF_PI) this.pos = getPos().add(getOrientation().mult(MOVE_VELOCITY));
     }
-
-    /*
-    public void moveToTargetPos() {
-        if (this.targetPos != null) {
-            var currPos = getPos();
-            var a = getOrientation().normalize();
-            var b = targetPos.normalize();
-
-            var alpha = MathF.atan2(a.x * b.y - a.y * b.x, a.x * b.x + a.y * b.y);
-            this.rotationAngle += Math.min(alpha, ROTATION_VELOCITY);
-
-            // Only move, if angle between character orientation and target orientation <= Pi/2
-            if (Math.abs(alpha) <= MathF.HALF_PI) {
-                var targetVec = this.targetPos.subtract(currPos);
-
-                // stop moving, if the distance between character and target pos < 2f * MOVE_VELOCITY
-                this.pos = currPos.add(getOrientation().mult(MOVE_VELOCITY));
-                if (targetVec.length() < 2f * MOVE_VELOCITY) {
-                    targetPos = null;
-                }
-            }
-
-        }
-    }
-     */
-
 }

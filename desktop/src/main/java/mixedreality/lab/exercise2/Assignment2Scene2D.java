@@ -8,6 +8,7 @@ package mixedreality.lab.exercise2;
 
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
+import math.MathF;
 import sprites.AnimatedSprite;
 import sprites.Constants;
 import sprites.SpriteAnimationImporter;
@@ -193,33 +194,8 @@ public class Assignment2Scene2D extends Scene2D implements MouseListener {
 
         var x = orientation.x;
         var y = orientation.y;
-        var res = Constants.WalkAnimations.WALK_E;
+        var res = Constants.WalkAnimations.WALK_SW;
 
-//        if (y < 1f / 3f) { // South region
-//            if (x < 1f / 3f) {
-//                res = Constants.WalkAnimations.WALK_SW;
-//            } else if (x < 2f / 3f) {
-//                res = Constants.WalkAnimations.WALK_S;
-//            } else {
-//                res = Constants.WalkAnimations.WALK_SE;
-//            }
-//        } else if (y < 2f / 3f) {// Middle region (west or east)
-//
-//            if (x < 1f / 3f) {
-//                res = Constants.WalkAnimations.WALK_W;
-//            } else {
-//                res = Constants.WalkAnimations.WALK_E;
-//            }
-//        } else {//North region
-//            if (x < 1f / 3f) {
-//                res = Constants.WalkAnimations.WALK_NW;
-//            } else if (x < 2f / 3f) {
-//                res = Constants.WalkAnimations.WALK_N;
-//            } else {
-//                res = Constants.WalkAnimations.WALK_NE;
-//            }
-//
-//        }
         if (y < 0.5f) { // South region
             if (x < 0.5f) {
                 res = Constants.WalkAnimations.WALK_S;
@@ -243,11 +219,11 @@ public class Assignment2Scene2D extends Scene2D implements MouseListener {
      */
     protected Matrix3f getArrowPose(Avatar avatar, Vector2f spritePos) {
         // constructing base vectors
-        Vector2f b1 = avatar.getPos().subtract(arrowPos);
+        Vector2f b1 = avatar.getPos().subtract(arrowPos).normalize();
         Vector2f b2 = new Vector2f(b1.y, -b1.x);
         // construct transformation matrix
         return new Matrix3f(b1.x, b2.x, arrowPos.x,
-                b1.y, b2.y, arrowPos.y,
-                0, 0, 1);
+                            b1.y, b2.y, arrowPos.y,
+                            0, 0, 1);
     }
 }
