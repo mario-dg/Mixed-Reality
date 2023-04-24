@@ -52,7 +52,7 @@ public class MyRendererScene extends Scene2D {
 
         ObjReader reader = new ObjReader();
         mesh = reader.read("models/cube.obj");
-//        mesh = reader.read("Models/deer.obj");
+        //mesh = reader.read("Models/deer.obj");
 
         setupListeners();
     }
@@ -70,7 +70,7 @@ public class MyRendererScene extends Scene2D {
             // Create model matrix from all 3 transformations (translation, scale and rotation)
             var m = Utils.modelMatrix(modelScale, modelTranslation, modelRotation);
             // Get view matrix from the camera
-            var v = camera.makeCameraMatrix();
+            var v = camera.makeCameraMatrix().invert();
             // Calculate projection matrix
             var p = Utils.projectionMatrix(camera, 0.1f, 100f);
             // Calculate screen mapping matrix
@@ -102,7 +102,7 @@ public class MyRendererScene extends Scene2D {
                 var dot_product = triNormal.dot(new Vector3f(0f, 0f, 1f));
 
                 // see if triangle normal is facing in direction of camera view
-                if (dot_product > 0 || !backfaceCulling) {
+                if (dot_product < 0 || !backfaceCulling) {
                     // convert to screen space
                     var screen_a = k.mult(trans_a);
                     var screen_b = k.mult(trans_b);
