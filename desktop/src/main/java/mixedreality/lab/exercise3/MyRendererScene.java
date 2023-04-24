@@ -7,7 +7,6 @@
 package mixedreality.lab.exercise3;
 
 import com.jme3.math.*;
-import math.MathF;
 import mixedreality.base.math.Utils;
 import mixedreality.base.mesh.ObjReader;
 import mixedreality.base.mesh.TriangleMesh;
@@ -39,11 +38,6 @@ public class MyRendererScene extends Scene2D {
      */
     protected boolean backfaceCulling;
 
-    /**
-     * This flag enables/disables backface culling
-     */
-    protected boolean rotateModel;
-
     public MyRendererScene(int width, int height) {
         super(width, height);
         camera = new Camera(new Vector3f(0, 0, -2), new Vector3f(0, 0, 0),
@@ -51,24 +45,21 @@ public class MyRendererScene extends Scene2D {
                 width, height);
         backfaceCulling = true;
         lastMousePosition = null;
-        rotateModel = false;
+
+        modelRotation = new Vector3f(0f, 0f, 0f);
+        modelTranslation = new Vector3f(0f, 0f, 0f);
+        modelScale = new Vector3f(1f, 1f, 1f);
 
         ObjReader reader = new ObjReader();
-//        mesh = reader.read("models/cube.obj");
-        mesh = reader.read("Models/deer.obj");
+        mesh = reader.read("models/cube.obj");
+//        mesh = reader.read("Models/deer.obj");
 
         setupListeners();
     }
 
-    float angleX = 0;
-    float angleY = 0;
-    float angleZ = 0;
-    float scaleX = 1f;
-    float scaleY = 1f;
-    float scaleZ = 1f;
-    float translateX = 0f;
-    float translateY = 0f;
-    float translateZ = 0f;
+    Vector3f modelRotation;
+    Vector3f modelScale;
+    Vector3f modelTranslation;
 
     @Override
     public void paint(Graphics g) {
@@ -76,13 +67,8 @@ public class MyRendererScene extends Scene2D {
         g.clearRect(0, 0, getWidth(), getHeight());
 
         if (mesh != null) {
-            if (rotateModel) {
-                angleX += MathF.random(0.0001f, 0.01f);
-                angleY += MathF.random(0.0001f, 0.01f);
-                angleZ += MathF.random(0.0001f, 0.01f);
-            }
             // Create model matrix from all 3 transformations (translation, scale and rotation)
-            var m = Utils.modelMatrix(new Vector3f(scaleX, scaleY, scaleZ), new Vector3f(translateX, translateY, translateZ), new Vector3f(angleX, angleY, angleZ));
+            var m = Utils.modelMatrix(modelScale, modelTranslation, modelRotation);
             // Get view matrix from the camera
             var v = camera.makeCameraMatrix();
             // Calculate projection matrix
@@ -157,18 +143,38 @@ public class MyRendererScene extends Scene2D {
         });
         panel.add(cbBackfaceCulling);
 
-        JCheckBox cbRotateModelOnMouseMove = new JCheckBox("rotate model on mouse move");
-        cbRotateModelOnMouseMove.setSelected(rotateModel);
-        cbRotateModelOnMouseMove.addActionListener(e -> {
-            rotateModel = cbRotateModelOnMouseMove.isSelected();
-            repaint();
-        });
-        panel.add(cbRotateModelOnMouseMove);
+
+        panel.add(new JLabel("Rotate x"));
+        JSlider cbRotateX = new JSlider(0, (int)(2 * Math.PI * 100), 0);
+        cbRotateX.addChangeListener(e -> {
+                    modelRotation.setX(cbRotateX.getValue() / 100f);
+                    repaint();
+                }
+        );
+        panel.add(cbRotateX);
+
+        panel.add(new JLabel("Rotate y"));
+        JSlider cbRotateY = new JSlider(0, (int)(2 * Math.PI * 100), 0);
+        cbRotateY.addChangeListener(e -> {
+                    modelRotation.setY(cbRotateY.getValue() / 100f);
+                    repaint();
+                }
+        );
+        panel.add(cbRotateY);
+
+        panel.add(new JLabel("Rotate z"));
+        JSlider cbRotateZ = new JSlider(0, (int)(2 * Math.PI * 100), 0);
+        cbRotateZ.addChangeListener(e -> {
+                    modelRotation.setZ(cbRotateZ.getValue() / 100f);
+                    repaint();
+                }
+        );
+        panel.add(cbRotateZ);
 
         panel.add(new JLabel("scale x"));
         JSlider cbScaleX = new JSlider(1, 20, 1);
         cbScaleX.addChangeListener(e -> {
-                    scaleX = 1f + cbScaleX.getValue() / 10f;
+                    modelScale.setX(1f + cbScaleX.getValue() / 10f);
                     repaint();
                 }
         );
@@ -177,7 +183,7 @@ public class MyRendererScene extends Scene2D {
         panel.add(new JLabel("scale y"));
         JSlider cbScaleY = new JSlider(1, 20, 1);
         cbScaleY.addChangeListener(e -> {
-                    scaleY = 1f + cbScaleY.getValue() / 10f;
+                    modelScale.setY(1f + cbScaleY.getValue() / 10f);
                     repaint();
                 }
         );
@@ -186,7 +192,7 @@ public class MyRendererScene extends Scene2D {
         panel.add(new JLabel("scale z"));
         JSlider cbScaleZ = new JSlider(1, 20, 1);
         cbScaleZ.addChangeListener(e -> {
-                    scaleZ = 1f + cbScaleZ.getValue() / 10f;
+                    modelScale.setZ(1f + cbScaleZ.getValue() / 10f);
                     repaint();
                 }
         );
@@ -194,31 +200,41 @@ public class MyRendererScene extends Scene2D {
 
 
         panel.add(new JLabel("translate x"));
-        JSlider cbtranslateX = new JSlider(-40, 20, 0);
-        cbtranslateX.addChangeListener(e -> {
-                    translateX = cbtranslateX.getValue() / 10f;
+        JSlider cbTranslateX = new JSlider(-40, 20, 0);
+        cbTranslateX.addChangeListener(e -> {
+                    modelTranslation.setX(cbTranslateX.getValue() / 10f);
                     repaint();
                 }
         );
-        panel.add(cbtranslateX);
+        panel.add(cbTranslateX);
 
         panel.add(new JLabel("translate y"));
-        JSlider cbtranslateY = new JSlider(-40, 20, 0);
-        cbtranslateY.addChangeListener(e -> {
-                    translateY = cbtranslateY.getValue() / 10f;
+        JSlider cbTranslateY = new JSlider(-40, 20, 0);
+        cbTranslateY.addChangeListener(e -> {
+                    modelTranslation.setY(cbTranslateY.getValue() / 10f);
                     repaint();
                 }
         );
-        panel.add(cbtranslateY);
+        panel.add(cbTranslateY);
 
         panel.add(new JLabel("translate z"));
-        JSlider cbtranslateZ = new JSlider(-40, 20, 0);
-        cbtranslateZ.addChangeListener(e -> {
-                    translateZ = cbtranslateZ.getValue() / 10f;
+        JSlider cbTranslateZ = new JSlider(-40, 20, 0);
+        cbTranslateZ.addChangeListener(e -> {
+                    modelTranslation.setZ(cbTranslateZ.getValue() / 10f);
                     repaint();
                 }
         );
-        panel.add(cbtranslateZ);
+        panel.add(cbTranslateZ);
+
+        JButton cbReset = new JButton("Reset");
+        cbReset.addActionListener(e -> {
+            modelRotation = new Vector3f(0f, 0f, 0f);
+            modelTranslation = new Vector3f(0f, 0f, 0f);
+            modelScale = new Vector3f(1f, 1f, 1f);
+            repaint();
+        });
+        panel.add(cbReset);
+
         return panel;
     }
 
@@ -242,8 +258,6 @@ public class MyRendererScene extends Scene2D {
 
             @Override
             public void mouseMoved(MouseEvent e) {
-                if (rotateModel)
-                    repaint();
             }
         });
 
