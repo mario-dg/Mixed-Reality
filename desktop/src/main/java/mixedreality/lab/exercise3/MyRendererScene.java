@@ -119,7 +119,7 @@ public class MyRendererScene extends Scene2D {
 
     @Override
     public String getTitle() {
-        return "2D Renderer";
+        return "Marios 2D Renderer";
     }
 
     /**

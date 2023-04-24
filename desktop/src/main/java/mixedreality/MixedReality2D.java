@@ -11,6 +11,7 @@ import mixedreality.base.math.Curve;
 import mixedreality.lab.exercise1.BezierBasisFunction;
 import mixedreality.lab.exercise1.CurveScene2D;
 import mixedreality.lab.exercise2.Assignment2Scene2D;
+import mixedreality.lab.exercise3.JannisRendererScene;
 import mixedreality.lab.exercise3.MyRendererScene;
 import mixedreality.lab.exercise4.SimplificationScene;
 import mixedreality.lab.exercise6.LSystemScene2D;
@@ -39,6 +40,7 @@ public class MixedReality2D extends CG2DApplication {
 
         // Assignment 3
         addScene2D(new MyRendererScene(600, 600));
+        addScene2D(new JannisRendererScene(600, 600));
 
         // Assignment 4
         addScene2D(new SimplificationScene(600, 600));
