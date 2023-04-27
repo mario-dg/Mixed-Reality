@@ -38,6 +38,11 @@ public class MyRendererScene extends Scene2D {
      */
     protected boolean backfaceCulling;
 
+    /**
+     * Selection of the mesh.
+     */
+    private JComboBox<String> cbMesh;
+
     public MyRendererScene(int width, int height) {
         super(width, height);
         camera = new Camera(new Vector3f(0, 0, -2), new Vector3f(0, 0, 0),
@@ -55,6 +60,12 @@ public class MyRendererScene extends Scene2D {
         //mesh = reader.read("Models/deer.obj");
 
         setupListeners();
+    }
+
+    private void loadMesh(String path){
+        var reader = new ObjReader();
+        mesh = reader.read(path);
+        repaint();
     }
 
     Vector3f modelRotation;
@@ -77,11 +88,9 @@ public class MyRendererScene extends Scene2D {
             var k = Utils.screenMapping(camera);
             // Order of multiplication very important
             var mvp = p.mult(v).mult(m);
-            var color = new Color(255, 0, 0);
 
             for (int i = 0; i < mesh.getNumberOfTriangles(); i++) {
                 var currTri = mesh.getTriangle(i);
-//                color = new Color(currTri.getColor().getRed(), currTri.getColor().getGreen(), currTri.getColor().getBlue());
                 // get vertex of all 3 points from their specified index
                 var a = Utils.vec4(mesh.getVertex(currTri.getA()).getPosition());
                 var b = Utils.vec4(mesh.getVertex(currTri.getB()).getPosition());
@@ -109,9 +118,9 @@ public class MyRendererScene extends Scene2D {
                     var screen_c = k.mult(trans_c);
 
                     // draw final triangle
-                    drawLine(g2, new Vector2f(screen_a.x, screen_a.y), new Vector2f(screen_b.x, screen_b.y), color);
-                    drawLine(g2, new Vector2f(screen_b.x, screen_b.y), new Vector2f(screen_c.x, screen_c.y), color);
-                    drawLine(g2, new Vector2f(screen_a.x, screen_a.y), new Vector2f(screen_c.x, screen_c.y), color);
+                    drawLine(g2, new Vector2f(screen_a.x, screen_a.y), new Vector2f(screen_b.x, screen_b.y), Color.BLACK);
+                    drawLine(g2, new Vector2f(screen_b.x, screen_b.y), new Vector2f(screen_c.x, screen_c.y), Color.BLACK);
+                    drawLine(g2, new Vector2f(screen_a.x, screen_a.y), new Vector2f(screen_c.x, screen_c.y), Color.BLACK);
                 }
             }
         }
@@ -134,6 +143,13 @@ public class MyRendererScene extends Scene2D {
     public JPanel getUserInterface() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        cbMesh = new JComboBox<>();
+        cbMesh.addItem("models/cube.obj");
+        cbMesh.addItem("Models/deer.obj");
+        cbMesh.setSelectedIndex(0);
+        cbMesh.addActionListener(e -> loadMesh((String)cbMesh.getSelectedItem()));
+        panel.add(cbMesh);
 
         JCheckBox cbBackfaceCulling = new JCheckBox("backfaceCulling");
         cbBackfaceCulling.setSelected(backfaceCulling);
