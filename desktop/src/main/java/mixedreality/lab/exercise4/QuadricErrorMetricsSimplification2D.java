@@ -9,6 +9,7 @@ package mixedreality.lab.exercise4;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.math.Vector4f;
 import misc.Logger;
 
 import java.util.*;
@@ -93,17 +94,18 @@ public class QuadricErrorMetricsSimplification2D {
    * Computes the initial QEM for an edge.
    */
   protected Matrix3f computeDistanceMatrix(PolygonEdge edge) {
+    Vector2f ei = edge.getEndVertex().getPosition().subtract(edge.getStartVertex().getPosition()).normalize();
+    Vector2f ni = new Vector2f(ei.y, -ei.x);
+    Vector3f n_i = new Vector3f(ni.x, ni.y, -ni.dot(edge.getStartVertex().getPosition()));
 
-    // TODO
-
-    return new Matrix3f();
+    return dyadic(n_i, n_i);
   }
 
   protected Matrix3f computePointQem(PolygonVertex v) {
+    Matrix3f neighbour1 = computeDistanceMatrix(v.getIncomingEdge());
+    Matrix3f neighbour2 = computeDistanceMatrix(v.getOutgoingEdge());
 
-    // TODO
-
-    return new Matrix3f();
+    return add(neighbour1, neighbour2);
   }
 
   /**
@@ -111,11 +113,16 @@ public class QuadricErrorMetricsSimplification2D {
    * collapse.
    */
   protected EdgeCollapse computeEdgeCollapseResult(PolygonEdge edge) {
+    // Fehlerquadrike für Kante berechnen
+    Matrix3f Qse = add(computePointQem(edge.getStartVertex()), computePointQem(edge.getEndVertex()));
+    // Ableitung bilden
+    Matrix3f Q_dach_se = Qse.clone().setRow(2, new Vector3f(0,0,1));
 
-    // TODO
+    Vector3f vNeu = Q_dach_se.invert().mult(new Vector3f(0, 0, 1));
+    float error = Qse.mult(vNeu).dot(vNeu);
 
     Vector2f midPoint = edge.getStartVertex().getPosition().add(edge.getEndVertex().getPosition()).mult(0.5f);
-    return new EdgeCollapse(-1, new Matrix3f(), midPoint);
+    return new EdgeCollapse(error, Qse, convert3to2(vNeu));
   }
 
   protected PolygonVertex collapse(PolygonEdge edge, Vector2f newPos) {
