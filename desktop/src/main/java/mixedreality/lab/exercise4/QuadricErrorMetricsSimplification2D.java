@@ -121,7 +121,6 @@ public class QuadricErrorMetricsSimplification2D {
     Vector3f vNeu = Q_dach_se.invert().mult(new Vector3f(0, 0, 1));
     float error = Qse.mult(vNeu).dot(vNeu);
 
-    Vector2f midPoint = edge.getStartVertex().getPosition().add(edge.getEndVertex().getPosition()).mult(0.5f);
     return new EdgeCollapse(error, Qse, convert3to2(vNeu));
   }
 
