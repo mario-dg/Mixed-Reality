@@ -34,7 +34,8 @@ public class Utils {
         var a = angles.x;
         var b = angles.y;
         var c = angles.z;
-        return new Matrix4f(MathF.cos(a) * MathF.cos(b), MathF.cos(a) * MathF.sin(b) * MathF.sin(c) - MathF.sin(a) * MathF.cos(c), MathF.cos(a) * MathF.sin(b) * MathF.cos(c) + MathF.sin(a) * MathF.sin(c), 0,
+        return new Matrix4f(
+                MathF.cos(a) * MathF.cos(b), MathF.cos(a) * MathF.sin(b) * MathF.sin(c) - MathF.sin(a) * MathF.cos(c), MathF.cos(a) * MathF.sin(b) * MathF.cos(c) + MathF.sin(a) * MathF.sin(c), 0,
                 MathF.sin(a) * MathF.cos(b), MathF.sin(a) * MathF.sin(b) * MathF.sin(c) + MathF.cos(a) * MathF.cos(c), MathF.sin(a) * MathF.sin(b) * MathF.cos(c) - MathF.cos(a) * MathF.sin(c), 0,
                 -MathF.sin(b), MathF.cos(b) * MathF.sin(c), MathF.cos(b) * MathF.cos(c), 0,
                 0, 0, 0, 1);
@@ -42,7 +43,8 @@ public class Utils {
 
 
     public static Matrix4f scaleMatrix3D(Vector3f scale) {
-        return new Matrix4f(scale.x, 0, 0, 0,
+        return new Matrix4f(
+                scale.x, 0, 0, 0,
                 0, scale.y, 0, 0,
                 0, 0, scale.z, 0,
                 0, 0, 0, 1);
@@ -56,7 +58,8 @@ public class Utils {
     }
 
     public static Matrix3f rotationMatrix2D(float angle) {
-        return new Matrix3f(MathF.cos(angle), -MathF.sin(angle), 0,
+        return new Matrix3f(
+                MathF.cos(angle), -MathF.sin(angle), 0,
                 MathF.sin(angle), MathF.cos(angle), 0,
                 0, 0, 1);
     }

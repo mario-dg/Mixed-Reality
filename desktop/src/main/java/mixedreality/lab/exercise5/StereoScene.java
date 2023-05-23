@@ -17,6 +17,8 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Sphere;
+import math.MathF;
+import mixedreality.base.math.Utils;
 import mixedreality.base.mesh.TriangleMesh;
 import mixedreality.base.mesh.TriangleMeshTools;
 import mixedreality.base.mesh.Vertex;
@@ -25,6 +27,10 @@ import ui.AbstractCameraController;
 import ui.Scene3D;
 
 import javax.swing.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.*;
+import java.util.Vector;
 
 /**
  * Base 3D scene for exercise 5.
@@ -196,12 +202,84 @@ public class StereoScene extends Scene3D {
     rootNode.attachChild(sphereGeometry);
   }
 
+  private Vector2f positionToScreen(Vector3f t, Camera camera) {
+    Vector4f t4 = new Vector4f(t.x, t.y, t.z, 1);
+    // Create model matrix
+    Matrix4f m = Matrix4f.IDENTITY;
+    // Get view matrix from the camera
+    Matrix4f v = camera.makeCameraMatrix().invert();
+    // Calculate projection matrix
+    Matrix4f p = new Matrix4f(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 1/camera.getZ0(), 0
+    );
+    // Calculate screen mapping matrix
+    float w = camera.getWidth();
+    float h = camera.getHeight();
+    float fx = w / (2 * MathF.tan(camera.getFovX() / 2));
+    float fy = h / (2 * MathF.tan(camera.getFovY() / 2));
+    Matrix4f k = new Matrix4f(
+            fx, 0, 0, w/2,
+            0, fy, 0, h/2,
+            0, 0, 0, 0,
+            0, 0, 0, 0
+    );
+    Matrix4f mvp = p.mult(v).mult(m);
+    t4 = mvp.mult(t4);
+    t4 = t4.divide(t4.w);
+    t4 = k.mult(t4);
+    return new Vector2f(t4.x, t4.y);
+  }
+
+  private double error(List<Vector2f> ms, Vector3f t, List<Camera> cameras) {
+    double e = 0;
+    for (int i = 0; i < ms.size(); i++) {
+      Camera camera = cameras.get(i);
+      Vector2f m = ms.get(i);
+      e += m.subtract(this.positionToScreen(t, camera)).lengthSquared();
+    }
+    return e;
+  }
+
+  private Vector3f gradient(List<Vector2f> ms, Vector3f x0, float h, List<Camera> cameras) {
+    double e = this.error(ms, x0, cameras);
+    double devx = (this.error(ms, x0.add(new Vector3f(h, 0, 0)), cameras) - e) / h;
+    double devy = (this.error(ms, x0.add(new Vector3f(0, h, 0)), cameras) - e) / h;
+    double devz = (this.error(ms, x0.add(new Vector3f(0, 0, h)), cameras) - e) / h;
+    Vector3f gradient = new Vector3f((float)devx, (float)devy, (float)devz);
+    System.out.println(gradient);
+    System.exit(-1);
+    return gradient;
+  }
+
+  private Vector3f getX0() {
+    return new Vector3f(0, 0, 0);
+  }
+
+  private Vector3f point = Vector3f.ZERO;
+
   @Override
   public void update(float time) {
+    List<Vector2f> ms = List.of(this.leftScreenCoords, this.rightScreenCoords);
+    List<Camera> cameras = List.of(this.leftCamera, this.rightCamera);
+    int n = 1000;
+    float h = 10e-3f;
+    float s = 10e-5f;
+    Vector3f xi = this.getX0();
+    for (int i = 0; i < n; i++) {
+      Vector3f xiNew = xi.subtract(gradient(ms, xi, h, cameras).mult(s));
+      xi = xiNew;
+    }
+    this.point = xi;
   }
 
   @Override
   public void render() {
+    this.addPoint(this.point, ColorRGBA.Red);
+    this.addLine(this.leftCamera.getEye(), this.point, ColorRGBA.Black);
+    this.addLine(this.rightCamera.getEye(), this.point, ColorRGBA.Black);
   }
 
   @Override
