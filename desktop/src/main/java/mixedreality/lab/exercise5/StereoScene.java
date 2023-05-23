@@ -76,7 +76,7 @@ public class StereoScene extends Scene3D {
   /**
    * Compute the world coordinates of a given screen pixel.
    */
-  private Vector3f toWorldCoordinateSystem(Vector2f screenCoords, Camera cam) {
+  protected Vector3f toWorldCoordinateSystem(Vector2f screenCoords, Camera cam) {
     float dx = FastMath.tan(cam.getFovX() / 2.0f) * cam.getZ0();
     float dy = FastMath.tan(cam.getFovY() / 2.0f) * cam.getZ0();
     Matrix4f camMatrix = cam.makeCameraMatrix();
@@ -202,12 +202,13 @@ public class StereoScene extends Scene3D {
     rootNode.attachChild(sphereGeometry);
   }
 
-  private Vector2f positionToScreen(Vector3f t, Camera camera) {
+  protected Vector2f positionToScreen(Vector3f t, Camera camera) {
     Vector4f t4 = new Vector4f(t.x, t.y, t.z, 1);
     // Create model matrix
     Matrix4f m = Matrix4f.IDENTITY;
     // Get view matrix from the camera
     Matrix4f v = camera.makeCameraMatrix().invert();
+    //Matrix4f v = Matrix4f.IDENTITY;
     // Calculate projection matrix
     Matrix4f p = new Matrix4f(
             1, 0, 0, 0,
@@ -233,7 +234,7 @@ public class StereoScene extends Scene3D {
     return new Vector2f(t4.x, t4.y);
   }
 
-  private double error(List<Vector2f> ms, Vector3f t, List<Camera> cameras) {
+  protected double error(List<Vector2f> ms, Vector3f t, List<Camera> cameras) {
     double e = 0;
     for (int i = 0; i < ms.size(); i++) {
       Camera camera = cameras.get(i);
@@ -243,14 +244,12 @@ public class StereoScene extends Scene3D {
     return e;
   }
 
-  private Vector3f gradient(List<Vector2f> ms, Vector3f x0, float h, List<Camera> cameras) {
+  protected Vector3f gradient(List<Vector2f> ms, Vector3f x0, float h, List<Camera> cameras) {
     double e = this.error(ms, x0, cameras);
     double devx = (this.error(ms, x0.add(new Vector3f(h, 0, 0)), cameras) - e) / h;
     double devy = (this.error(ms, x0.add(new Vector3f(0, h, 0)), cameras) - e) / h;
     double devz = (this.error(ms, x0.add(new Vector3f(0, 0, h)), cameras) - e) / h;
     Vector3f gradient = new Vector3f((float)devx, (float)devy, (float)devz);
-    System.out.println(gradient);
-    System.exit(-1);
     return gradient;
   }
 
@@ -258,7 +257,7 @@ public class StereoScene extends Scene3D {
     return new Vector3f(0, 0, 0);
   }
 
-  private Vector3f point = Vector3f.ZERO;
+  private Vector3f point = getX0();
 
   @Override
   public void update(float time) {
@@ -266,7 +265,7 @@ public class StereoScene extends Scene3D {
     List<Camera> cameras = List.of(this.leftCamera, this.rightCamera);
     int n = 1000;
     float h = 10e-3f;
-    float s = 10e-5f;
+    float s = 10e-8f;
     Vector3f xi = this.getX0();
     for (int i = 0; i < n; i++) {
       Vector3f xiNew = xi.subtract(gradient(ms, xi, h, cameras).mult(s));
