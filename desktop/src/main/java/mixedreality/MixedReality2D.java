@@ -14,7 +14,10 @@ import mixedreality.lab.exercise2.Assignment2Scene2D;
 import mixedreality.lab.exercise3.JannisRendererScene;
 import mixedreality.lab.exercise3.MyRendererScene;
 import mixedreality.lab.exercise4.SimplificationScene;
+import mixedreality.lab.exercise6.DragonCurveScene2D;
+import mixedreality.lab.exercise6.FractalPlant2D;
 import mixedreality.lab.exercise6.LSystemScene2D;
+import mixedreality.lab.exercise6.SierpinskiTriangle2D;
 import ui.CG2DApplication;
 
 
@@ -47,6 +50,9 @@ public class MixedReality2D extends CG2DApplication {
 
         // Assignment 6
         addScene2D(new LSystemScene2D(800, 600));
+        addScene2D(new DragonCurveScene2D(800, 600));
+        addScene2D(new SierpinskiTriangle2D(800, 600));
+        addScene2D(new FractalPlant2D(800, 600));
     }
 
     public static void main(String[] args) {

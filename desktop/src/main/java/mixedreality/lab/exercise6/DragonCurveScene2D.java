@@ -10,19 +10,18 @@ import com.jme3.math.Vector2f;
 import ui.Scene2D;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Implementation of an L-System
  */
-public class LSystemScene2D extends Scene2D {
+public class DragonCurveScene2D extends Scene2D {
 
     /**
      * The axiom is a single character
      */
-    protected Character axiom;
+    protected String axiom;
     /**
      * All rules are in a map which maps a character to its replacement.
      */
@@ -37,14 +36,16 @@ public class LSystemScene2D extends Scene2D {
      */
     protected String currentWord;
 
-    public LSystemScene2D(int width, int height) {
+    public DragonCurveScene2D(int width, int height) {
         super(width, height, new Vector2f(-1, -1), new Vector2f(1, 1));
-        this.axiom = 'F';
+        this.axiom = "FX";
         this.rules = new HashMap<>();
-        this.rules.put('F', "F+F--F+F");
+        this.rules.put('F', "");
+        this.rules.put('X', "-FX++FY-");
+        this.rules.put('Y', "+FX--FY+");
         this.rules.put('-', "-");
         this.rules.put('+', "+");
-        this.numIterations = 8;
+        this.numIterations = 12;
         this.currentWord = "";
 
         // Run derivation
@@ -70,12 +71,13 @@ public class LSystemScene2D extends Scene2D {
         }
     }
 
-    private Turtle turtle = new Turtle(0.01f, 60f, new Vector2f(-1.25f, 0), 0);
+    private Turtle turtle = new Turtle(0.01f, 45f, Vector2f.ZERO, 0);
 
     @Override
     public void paint(Graphics g) {
         g.drawRect(0, 0, getWidth(), getHeight());
         // Your task
+        turtle.position = Vector2f.ZERO;
         for (String symbol : this.currentWord.split("")) {
             switch (symbol) {
                 case "F" -> {
@@ -92,6 +94,6 @@ public class LSystemScene2D extends Scene2D {
 
     @Override
     public String getTitle() {
-        return "L-System";
+        return "Dragon Curve";
     }
 }

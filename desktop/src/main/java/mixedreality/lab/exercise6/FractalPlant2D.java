@@ -10,14 +10,14 @@ import com.jme3.math.Vector2f;
 import ui.Scene2D;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Implementation of an L-System
  */
-public class LSystemScene2D extends Scene2D {
+public class FractalPlant2D extends Scene2D {
 
     /**
      * The axiom is a single character
@@ -37,14 +37,17 @@ public class LSystemScene2D extends Scene2D {
      */
     protected String currentWord;
 
-    public LSystemScene2D(int width, int height) {
+    public FractalPlant2D(int width, int height) {
         super(width, height, new Vector2f(-1, -1), new Vector2f(1, 1));
-        this.axiom = 'F';
+        this.axiom = 'X';
         this.rules = new HashMap<>();
-        this.rules.put('F', "F+F--F+F");
+        this.rules.put('F', "FF");
+        this.rules.put('X', "F+[[X]-X]-F[-FX]+X");
         this.rules.put('-', "-");
         this.rules.put('+', "+");
-        this.numIterations = 8;
+        this.rules.put('[', "[");
+        this.rules.put(']', "]");
+        this.numIterations = 6;
         this.currentWord = "";
 
         // Run derivation
@@ -70,7 +73,8 @@ public class LSystemScene2D extends Scene2D {
         }
     }
 
-    private Turtle turtle = new Turtle(0.01f, 60f, new Vector2f(-1.25f, 0), 0);
+    private Turtle turtle = new Turtle(0.01f, 25f, new Vector2f(0f, -1f), 90);
+    private Stack<Turtle> stack = new Stack<>();
 
     @Override
     public void paint(Graphics g) {
@@ -85,6 +89,8 @@ public class LSystemScene2D extends Scene2D {
                 }
                 case "+" -> {turtle.rotate(1);}
                 case "-" -> {turtle.rotate(-1);}
+                case "[" -> {stack.add(turtle.clone());}
+                case "]" -> {this.turtle = stack.pop();}
                 default -> {}
             }
         }
@@ -92,6 +98,6 @@ public class LSystemScene2D extends Scene2D {
 
     @Override
     public String getTitle() {
-        return "L-System";
+        return "Fractal Plant";
     }
 }
