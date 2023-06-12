@@ -7,6 +7,7 @@
 package mixedreality.lab.exercise7;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
@@ -15,6 +16,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import misc.AxisAlignedBoundingBox;
 import mixedreality.base.mesh.TriangleMesh;
 import mixedreality.base.mesh.TriangleMeshTools;
 import mixedreality.lab.exercise7.functions.GourSat;
@@ -99,12 +101,16 @@ public class MarchingCubesScene3D extends Scene3D {
         TriangleMesh mesh = mc.makeMesh(f, 0,
                 new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1),
                 res, res, res);
-        mesh.setColor(ColorRGBA.Orange);
+//        mesh.setColor(ColorRGBA.Orange);
 
         Geometry node = TriangleMeshTools.createJMonkeyMesh(assetManager, mesh);
         rootNode.attachChild(node);
 
         cameraController.adjustViewTo(mesh.getBoundingBox());
+//        AxisAlignedBoundingBox bb = new AxisAlignedBoundingBox();
+//        bb.add(new Vector3f(-1f, -1f, -1f));
+//        bb.add(new Vector3f(1f, 1f, 1f));
+//        cameraController.adjustViewTo(bb);
     }
 
     @Override
@@ -119,7 +125,7 @@ public class MarchingCubesScene3D extends Scene3D {
 
         // Sun
         PointLight sun = new PointLight();
-        sun.setPosition(new Vector3f(3,3,3));
+        sun.setPosition(new Vector3f(3, 3, 3));
         sun.setColor(ColorRGBA.White);
         //sun.setDirection(new Vector3f(0.25f, -1, 0.1f));
         rootNode.addLight(sun);

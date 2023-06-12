@@ -6,11 +6,17 @@
 
 package mixedreality.lab.exercise7;
 
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import mixedreality.base.mesh.TriangleMesh;
 import mixedreality.lab.exercise7.functions.ImplicitFunction;
+import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.Arrays;
 import java.util.Optional;
+
+import static mixedreality.base.mesh.TriangleMeshTools.scale;
+import static mixedreality.base.mesh.TriangleMeshTools.translate;
 
 /**
  * This class creates a triangle mesh for a given implicit function using the Marching Cubes algorithm.
@@ -38,20 +44,85 @@ public class MarchingCubes {
      * Create a mesh for a single cube, given an 8-bit index.
      */
     public Optional<TriangleMesh> getMesh(Index8Bit index, float[] values, float isovalue) {
-        // TODO
-        return Optional.empty();
+        int faceStart = index.toInt() * 15;
+        int faceEnd = faceStart + 15;
+        int[] edgeIndices = Arrays.copyOfRange(faces, faceStart, faceEnd);
+
+        int indexOfNegativeOne = ArrayUtils.indexOf(edgeIndices, -1);
+        // Kein Dreieck
+        if (indexOfNegativeOne == 0) {
+            return Optional.empty();
+        }
+        // Keine -1 gefunden => 5 Dreiecke
+        int numTris = indexOfNegativeOne == -1 ? 5 : indexOfNegativeOne / 3;
+
+        TriangleMesh mesh = new TriangleMesh();
+        // Alle interpolierten Vertices zum Mesh hinzufügen
+        for (int i = 0; i < 12; ++i) {
+            Vector3f edgePoint = getEdgePoint(i, values, isovalue);
+            mesh.addVertex(edgePoint);
+        }
+
+        // Dreieck aus den Vertices erzeugen
+        for (int i = 0; i < numTris * 3; i += 3) {
+            mesh.addTriangle(edgeIndices[i + 2], edgeIndices[i + 1], edgeIndices[i]);
+        }
+
+        return Optional.of(mesh);
     }
 
     /**
      * Generate a mesh for the complete domain: split domain into a structured
-     * grid, tesselate all grid cells and unit all created triangles to a single
+     * grid, tessellate all grid cells and unite all created triangles to a single
      * mesh.
      */
     public TriangleMesh makeMesh(ImplicitFunction f, float isovalue,
                                  Vector3f ll, Vector3f ur,
                                  int resX, int resY, int resZ) {
-        // TODO
+        Vector3f domainDim = new Vector3f(ur.x - ll.x, ur.y - ll.y, ur.z - ll.z);
+        Vector3f voxelCubeDim = domainDim.divide(new Vector3f(resX, resY, resZ));
+
         TriangleMesh mesh = new TriangleMesh();
+        for (int x = 0; x < resX; ++x) {
+            for (int y = 0; y < resY; ++y) {
+                for (int z = 0; z < resZ; ++z) {
+                    Vector3f corner0 = ll.add(new Vector3f(voxelCubeDim.x * x, voxelCubeDim.y * y, voxelCubeDim.z * z));
+                    Vector3f corner1 = corner0.add(new Vector3f(voxelCubeDim.x, 0, 0));
+                    Vector3f corner2 = corner1.add(new Vector3f(0, 0, voxelCubeDim.z));
+                    Vector3f corner3 = corner2.add(new Vector3f(-voxelCubeDim.x, 0, 0));
+                    Vector3f corner4 = corner0.add(new Vector3f(0, voxelCubeDim.y, 0));
+                    Vector3f corner5 = corner4.add(new Vector3f(voxelCubeDim.x, 0, 0));
+                    Vector3f corner6 = corner5.add(new Vector3f(0, 0, voxelCubeDim.z));
+                    Vector3f corner7 = corner6.add(new Vector3f(-voxelCubeDim.x, 0, 0));
+
+                    float[] values = new float[8];
+                    values[0] = f.eval(corner0);
+                    values[1] = f.eval(corner1);
+                    values[2] = f.eval(corner2);
+                    values[3] = f.eval(corner3);
+                    values[4] = f.eval(corner4);
+                    values[5] = f.eval(corner5);
+                    values[6] = f.eval(corner6);
+                    values[7] = f.eval(corner7);
+
+                    Index8Bit index = new Index8Bit();
+                    for (int i = 0; i < 8; ++i){
+                        index.set(i, values[i] <= isovalue ? (short) 0 : (short) 1);
+                    }
+
+                    Optional<TriangleMesh> voxelMesh = getMesh(index, values, isovalue);
+
+                    if(voxelMesh.isPresent()){
+                        TriangleMesh rawMesh = voxelMesh.get();
+                        scale(rawMesh, voxelCubeDim.x);
+                        translate(rawMesh, corner0);
+                        rawMesh.setColor(ColorRGBA.randomColor());
+                        mesh.unite(rawMesh);
+                    }
+                }
+            }
+        }
+
         mesh.computeTriangleNormals();
         return mesh;
     }
@@ -91,7 +162,7 @@ public class MarchingCubes {
      * Interpolate a position between p and q.
      */
     private Vector3f interpolate(int aIdx, int bIdx, float[] values, float isoValue) {
-        float lambda = values == null ? 0.5f : (isoValue - values[aIdx]) / (values[bIdx] - values[aIdx]);
+        float lambda = (values == null) ? 0.5f : (isoValue - values[aIdx]) / (values[bIdx] - values[aIdx]);
         Vector3f xP = corners[aIdx].mult(1.0f - lambda);
         Vector3f xQ = corners[bIdx].mult(lambda);
         return xP.add(xQ);
