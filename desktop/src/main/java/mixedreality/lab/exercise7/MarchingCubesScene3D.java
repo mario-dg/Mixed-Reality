@@ -97,20 +97,20 @@ public class MarchingCubesScene3D extends Scene3D {
     private void rebuildScene() {
         rootNode.detachAllChildren();
 
-        int res = 25;
+        int res = 35;
         TriangleMesh mesh = mc.makeMesh(f, 0,
                 new Vector3f(-1, -1, -1), new Vector3f(1, 1, 1),
                 res, res, res);
-//        mesh.setColor(ColorRGBA.Orange);
+        mesh.setColor(ColorRGBA.Orange);
 
         Geometry node = TriangleMeshTools.createJMonkeyMesh(assetManager, mesh);
         rootNode.attachChild(node);
 
-        cameraController.adjustViewTo(mesh.getBoundingBox());
-//        AxisAlignedBoundingBox bb = new AxisAlignedBoundingBox();
-//        bb.add(new Vector3f(-1f, -1f, -1f));
-//        bb.add(new Vector3f(1f, 1f, 1f));
-//        cameraController.adjustViewTo(bb);
+//        cameraController.adjustViewTo(mesh.getBoundingBox());
+        AxisAlignedBoundingBox bb = new AxisAlignedBoundingBox();
+        bb.add(new Vector3f(-1f, -1f, -1f));
+        bb.add(new Vector3f(1f, 1f, 1f));
+        cameraController.adjustViewTo(bb);
     }
 
     @Override
