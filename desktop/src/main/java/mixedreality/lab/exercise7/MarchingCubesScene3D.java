@@ -106,11 +106,7 @@ public class MarchingCubesScene3D extends Scene3D {
         Geometry node = TriangleMeshTools.createJMonkeyMesh(assetManager, mesh);
         rootNode.attachChild(node);
 
-//        cameraController.adjustViewTo(mesh.getBoundingBox());
-        AxisAlignedBoundingBox bb = new AxisAlignedBoundingBox();
-        bb.add(new Vector3f(-1f, -1f, -1f));
-        bb.add(new Vector3f(1f, 1f, 1f));
-        cameraController.adjustViewTo(bb);
+        cameraController.adjustViewTo(mesh.getBoundingBox());
     }
 
     @Override

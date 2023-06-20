@@ -12,8 +12,7 @@ import mixedreality.base.mesh.TriangleMesh;
 import mixedreality.lab.exercise7.functions.ImplicitFunction;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 import static mixedreality.base.mesh.TriangleMeshTools.scale;
 import static mixedreality.base.mesh.TriangleMeshTools.translate;
@@ -57,17 +56,29 @@ public class MarchingCubes {
         int numTris = indexOfNegativeOne == -1 ? 5 : indexOfNegativeOne / 3;
 
         TriangleMesh mesh = new TriangleMesh();
-        // Alle interpolierten Vertices zum Mesh hinzufügen
-        for (int i = 0; i < 12; ++i) {
-            Vector3f edgePoint = getEdgePoint(i, values, isovalue);
-            mesh.addVertex(edgePoint);
+        for (int i = 0; i < numTris * 3; i += 3) {
+            mesh.addVertex(getEdgePoint(edgeIndices[i + 2], values, isovalue));
+            mesh.addVertex(getEdgePoint(edgeIndices[i + 1], values, isovalue));
+            mesh.addVertex(getEdgePoint(edgeIndices[i], values, isovalue));
+
+            mesh.addTriangle(i + 2, i + 1, i);
         }
+        // Compute edge points for every needed edge only once, to save computation time
+//        Map<Integer, Vector3f> edgeIndexToEdgePoint = new HashMap<>();
+//        for(int edgeIndex : Arrays.stream(edgeIndices).distinct().toArray()){
+//            if(edgeIndex == -1)
+//                continue;
+//            edgeIndexToEdgePoint.put(edgeIndex, getEdgePoint(edgeIndex, values, isovalue));
+//        }
 
         // Dreieck aus den Vertices erzeugen
-        for (int i = 0; i < numTris * 3; i += 3) {
-            mesh.addTriangle(edgeIndices[i + 2], edgeIndices[i + 1], edgeIndices[i]);
-        }
-
+//        for (int i = 0; i < numTris * 3; i += 3) {
+//            mesh.addVertex(edgeIndexToEdgePoint.get(edgeIndices[i + 2]));
+//            mesh.addVertex(edgeIndexToEdgePoint.get(edgeIndices[i + 1]));
+//            mesh.addVertex(edgeIndexToEdgePoint.get(edgeIndices[i]));
+//
+//            mesh.addTriangle(i + 2, i + 1, i);
+//        }
         return Optional.of(mesh);
     }
 
@@ -106,17 +117,17 @@ public class MarchingCubes {
                     values[7] = f.eval(corner7);
 
                     Index8Bit index = new Index8Bit();
-                    for (int i = 0; i < 8; ++i){
+                    for (int i = 0; i < 8; ++i) {
                         index.set(i, values[i] <= isovalue ? (short) 0 : (short) 1);
                     }
 
                     Optional<TriangleMesh> voxelMesh = getMesh(index, values, isovalue);
 
-                    if(voxelMesh.isPresent()){
+                    if (voxelMesh.isPresent()) {
                         TriangleMesh rawMesh = voxelMesh.get();
                         scale(rawMesh, voxelCubeDim.x);
                         translate(rawMesh, corner0);
-                        rawMesh.setColor(ColorRGBA.randomColor());
+                        rawMesh.flipTriangleOrientation();
                         mesh.unite(rawMesh);
                     }
                 }
