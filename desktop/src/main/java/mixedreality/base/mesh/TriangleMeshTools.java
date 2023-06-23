@@ -306,7 +306,16 @@ public class TriangleMeshTools {
       v.getPosition().set(newPos);
     }
   }
-
+  /**
+   * Scale the mesh vertices using the given factor.
+   */
+  public static void scale(TriangleMesh mesh, Vector3f scale) {
+    for (int i = 0; i < mesh.getNumberOfVertices(); i++) {
+      Vertex v = mesh.getVertex(i);
+      Vector3f newPos = v.getPosition().mult(scale);
+      v.getPosition().set(newPos);
+    }
+  }
   /**
    * Transform the mesh vertices using the given transformation matrix.
    */

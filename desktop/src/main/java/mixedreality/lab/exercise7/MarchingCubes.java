@@ -125,7 +125,7 @@ public class MarchingCubes {
 
                     if (voxelMesh.isPresent()) {
                         TriangleMesh rawMesh = voxelMesh.get();
-                        scale(rawMesh, voxelCubeDim.x);
+                        scale(rawMesh, voxelCubeDim);
                         translate(rawMesh, corner0);
                         rawMesh.flipTriangleOrientation();
                         mesh.unite(rawMesh);
